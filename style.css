@@ -1,0 +1,272 @@
+:root {
+    --primary: #4f46e5;
+    --accent: #FF6B6B;
+    --background: #F9FAFB;
+    --text: #1F2937;
+}
+
+body {
+    /* font-family: 'Inter', sans-serif;
+    background-color: var(--background);
+    color: var(--text); */
+    background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%);
+}
+
+
+.nav-link.active {
+    background-color: var(--primary);
+    color: white;
+    font-weight: 600;
+}
+
+.chart-container {
+    position: relative;
+    height: 320px;
+    width: 100%;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        height: 350px;
+        max-width: 350px;
+    }
+}
+
+#main-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: var(--background);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.wheel-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+}
+
+.wheel-container canvas {
+    display: block;
+}
+
+.pointer {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 30px solid #ef4444;
+    z-index: 10;
+}
+
+/* Modal Stilleri */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    border-radius: 0.5rem;
+}
+
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #ccc;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+button, .nav-link {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+button:hover, .nav-link:hover {
+    background-color: var(--accent);
+    transform: scale(1.05);
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    fill: var(--primary);
+}
+
+/*? İMG STİLLERİ */
+
+img, .card {
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/*! H ETİKET GÜNCELLEMELERİ BAŞLANGIÇ !*/
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
+
+h2 {
+    font-family: 'Caveat', cursive;
+    font-size: 2rem;
+    color: #4f46e5;
+}
+
+h1,
+h2 {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/*! H ETİKET GÜNCELLEMELERİ BİTİŞ !*/
+
+/*todo */
+/* Instagram Tarzı Galeri Stilleri */
+#gallery-grid {
+  display: grid;
+  gap: 1rem; /* Grid öğeleri arasındaki boşluk */
+}
+
+.gallery-item {
+  aspect-ratio: 1/1; /* Kare görünüm için */
+  overflow: hidden;
+  border-radius: 0.5rem; /* Hafif yuvarlatılmış köşeler */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative; /* Alt yazı için */
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Resmi kareye sığdırır, kırpma yapar */
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: scale(1.05); /* Hover'da hafif büyüme */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Hafif gölge */
+}
+
+.gallery-item:hover .bg-black {
+  opacity: 1; /* Hover'da alt yazıyı göster */
+}
+
+.gallery-item .bg-black {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Profil Başlığı Stilleri */
+.profile-header img {
+  border: 2px solid var(--primary);
+}
+
+.profile-header h3 {
+  font-family: 'Caveat', cursive;
+}
+
+/* Modal Stillerini Güncelle */
+.modal-content {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Ayarları */
+@media (min-width: 640px) {
+  #gallery-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  #gallery-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/*? Geri Sayım Sayaç Stilleri */
+#countdown-timer {
+  display: grid;
+  gap: 1rem;
+}
+
+#countdown-timer > div {
+  background-color: var(--background);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+#countdown-timer > div:hover {
+  transform: scale(1.05); /* Hafif büyüme efekti */
+}
+
+#countdown-timer span {
+  font-family: 'Caveat', cursive;
+  color: var(--primary);
+}
+
+#countdown-timer p {
+  font-size: 0.875rem;
+  color: var(--text);
+}
+
+/* Responsive Ayarları */
+@media (min-width: 640px) {
+  #countdown-timer {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bizim Dünyamız</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+
+<body class="font-sans antialiased">
+    <nav id="main-nav" class="py-4">
+        <div class="container mx-auto px-4 flex justify-center space-x-4">
+            <a href="#welcome" class="nav-link px-4 py-2 rounded-lg">Hoş Geldin</a>
+            <a href="#activity" class="nav-link px-4 py-2 rounded-lg">Etkinlik Seçici</a>
+            <a href="#gallery" class="nav-link px-4 py-2 rounded-lg">Fotoğraf Galerisi</a>
+            <a href="#memories" class="nav-link px-4 py-2 rounded-lg">Anılarımız</a>
+            <a href="#todo" class="nav-link px-4 py-2 rounded-lg">Yapılacaklar Listesi</a>
+            <a href="#message" class="nav-link px-4 py-2 rounded-lg">Mesaj Kutusu</a>
+        </div>
+    </nav>
+
+    <main>
+        <section id="welcome" class="py-12 text-center">
+            <div class="container mx-auto px-4">
+                <h1 class="mb-6">Hoş Geldin Sevgili Eşim!</h1>
+                <p class="text-slate-600 mb-8 max-w-2xl mx-auto">
+                    Bu sayfa, seninle birlikte geçirdiğimiz her anın değerini bilmek, eğlenceli yeni maceralara atılmak
+                    ve en güzel anılarımızı bir arada tutmak için hazırlandı. Hadi, senin için seçtiğim sürprizlere bir
+                    göz at!
+                </p>
+                <a href="#activity"
+                    class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-500 hover:scale-105 transition-all">Başlayalım!</a>
+            </div>
+        </section>
+        <section id="countdown" class="py-12">
+            <div class="container mx-auto px-4">
+                <h2 class="text-center mb-8">Bir Sonraki Yıldönümümüze Ne Kadar Kaldı?</h2>
+                <p class="text-center text-slate-600 mb-12 max-w-2xl mx-auto">
+                    Seninle geçirdiğimiz her an zaten bir kutlama, ama bir sonraki özel günümüz için geri sayalım!
+                </p>
+                <div id="countdown-timer" class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-lg mx-auto">
+                    <div class="bg-indigo-50 p-4 rounded-lg text-center">
+                        <span id="days" class="text-3xl font-bold text-indigo-700">0</span>
+                        <p class="text-sm text-slate-600">Gün</p>
+                    </div>
+                    <div class="bg-indigo-50 p-4 rounded-lg text-center">
+                        <span id="hours" class="text-3xl font-bold text-indigo-700">0</span>
+                        <p class="text-sm text-slate-600">Saat</p>
+                    </div>
+                    <div class="bg-indigo-50 p-4 rounded-lg text-center">
+                        <span id="minutes" class="text-3xl font-bold text-indigo-700">0</span>
+                        <p class="text-sm text-slate-600">Dakika</p>
+                    </div>
+                    <div class="bg-indigo-50 p-4 rounded-lg text-center">
+                        <span id="seconds" class="text-3xl font-bold text-indigo-700">0</span>
+                        <p class="text-sm text-slate-600">Saniye</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="activity" class="py-12">
+            <div class="container mx-auto px-4">
+                <h2 class="text-center mb-8">Sence Bu Hafta Ne Yapalım?</h2>
+                <p class="text-center text-slate-600 mb-12 max-w-2xl mx-auto">
+                    Artık neler yapacağız diye düşünmene gerek yok! Bu çarkı çevirerek, bu hafta ne yapacağımıza karar
+                    verelim. Her seferinde yeni bir sürpriz bizi bekliyor!
+                </p>
+                <div class="wheel-container mx-auto">
+                    <div class="pointer"></div>
+                    <canvas id="activityWheel"></canvas>
+                </div>
+                <div class="text-center mt-8">
+                    <button id="spinButton"
+                        class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-500 hover:scale-105 transition-all">Çarkı
+                        Çevir!</button>
+                    <p class="text-slate-500 mt-4">Çarkı çevirerek eğlenceli bir etkinlik seçin!</p>
+                    <div id="selectedActivityDisplay" class="mt-6"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="py-12">
+            <div class="container mx-auto px-4">
+                <div class="profile-header flex items-center mb-8">
+                    <img src="images/profil-resmi.jpeg" alt="Profil resmi"
+                        class="w-16 h-16 rounded-full mr-4 border-2 border-indigo-600">
+                    <div>
+                        <h3 class="text-lg font-semibold text-indigo-700 font-caveat">Bizim Anılarımız</h3>
+                        <p class="text-sm text-slate-500">Seninle geçirdiğim her an bir hazine 💙</p>
+                    </div>
+                </div>
+                <h2 class="text-center mb-8">Bizim Fotoğraf Galerimiz</h2>
+                <p class="text-center text-slate-600 mb-12 max-w-2xl mx-auto">
+                    Birlikte geçirdiğimiz en güzel anlardan bazılarını burada topladım. Resimlerin üzerine tıklayarak
+                    daha büyük hallerini görebilirsin. Her bir fotoğraf, bizim için özel bir anı!
+                </p>
+                <div id="gallery-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    <div class="gallery-item relative">
+                        <img src="images/iftar.jpeg" data-full="images/iftar.jpeg" alt="Anı 1"
+                            class="w-full h-full object-cover cursor-pointer" loading="lazy">
+                        <div
+                            class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span>Güzel bir iftar ❤️ </span>
+                        </div>
+                    </div>
+                    <div class="gallery-item relative">
+                        <img src="images/ilk-foto.jpeg" data-full="images/ilk-foto.jpeg" alt="Anı 2"
+                            class="w-full h-full object-cover cursor-pointer" loading="lazy">
+                        <div
+                            class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span>Birlikte ilk fotoğrafımız ❤️</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item relative">
+                        <img src="images/tanisma.jpeg" data-full="images/tanisma.jpeg" alt="Anı 3"
+                            class="w-full h-full object-cover cursor-pointer" loading="lazy">
+                        <div
+                            class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span>Kahve molası-İlk tanışma ☕</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item relative">
+                        <img src="images/el-pence.jpeg" data-full="images/el-pence.jpeg" alt="Anı 4"
+                            class="w-full h-full object-cover cursor-pointer" loading="lazy">
+                        <div
+                            class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span>Hatırlarsın 🚶</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item relative">
+                        <img src="images/uzun-yol-arkadasim.jpeg" data-full="images/uzun-yol-arkadasim.jpeg" alt="Anı 5"
+                            class="w-full h-full object-cover cursor-pointer" loading="lazy">
+                        <div
+                            class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span>Sen benimle yürüyecek, uzun yol arkadaşımsın 🌳</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item relative">
+                        <img src="images/omuz-omuza.jpeg" data-full="images/omuz-omuza.jpeg" alt="Anı 6"
+                            class="w-full h-full object-cover cursor-pointer" loading="lazy">
+                        <div
+                            class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span>Evde akşam yemeği 🍽️</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item relative">
+                        <img src="images/el-ele.jpeg" data-full="images/el-ele.jpeg" alt="Anı 7"
+                            class="w-full h-full object-cover cursor-pointer" loading="lazy">
+                        <div
+                            class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span>Konser gecesi 🎤</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item relative">
+                        <img src="images/yan-yana.jpeg" data-full="images/yan-yana.jpeg" alt="Anı 8"
+                            class="w-full h-full object-cover cursor-pointer" loading="lazy">
+                        <div
+                            class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span>Doğum günü kutlaması 🎂</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="photoModal" class="modal">
+                <span class="close-button">×</span>
+                <img id="modalImage" class="modal-content" src="" alt="Büyük resim">
+            </div>
+        </section>
+
+        <section id="memories" class="py-12">
+            <div class="container mx-auto px-4">
+                <h2 class="text-center mb-8">Unutulmaz Anılarımız</h2>
+                <p class="text-center text-slate-600 mb-12 max-w-2xl mx-auto">
+                    Hayatımızın dönüm noktalarını ve en tatlı anılarımızı burada hatırlayalım. Her tarih, bizim için
+                    özel bir hikaye barındırıyor.
+                </p>
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
+                    <div class="card bg-slate-50 p-6">
+                        <h3 class="text-xl font-semibold mb-2">13 Mayıs 2023 - Her şeyin başlangıcı...</h3>
+                        <p class="text-slate-600">O ilk buluşma heyecanı, her şeyin başladığı an... Kalbim hala aynı
+                            atıyor!</p>
+                    </div>
+                    <div class="card bg-slate-50 p-6">
+                        <h3 class="text-xl font-semibold mb-2">20 Ocak 2024 - Evlilik Teklifi</h3>
+                        <p class="text-slate-600">Hayatımın en güzel "Evet"i! O anı asla unutmayacağım.</p>
+                    </div>
+                    <div class="card bg-slate-50 p-6">
+                        <h3 class="text-xl font-semibold mb-2">20 Nisan 2024 - Nişanımız</h3>
+                        <p class="text-slate-600">Havanın durumu bile sana nasıl aşık olduğumu anlatıyordu oysa ki...
+                        </p>
+                    </div>
+                    <div class="card bg-slate-50 p-6">
+                        <h3 class="text-xl font-semibold mb-2">22 Ağustos 2024 - Kına</h3>
+                        <p class="text-slate-600">Bu özel günde, sevdiklerimizle birlikte olmanın mutluluğunu yaşadık.
+                            Her anı ölümsüzleştirmek için sabırsızlanıyorduk!</p>
+                    </div>
+                    <div class="card bg-slate-50 p-6">
+                        <h3 class="text-xl font-semibold mb-2">24 Ağustos 2024 - Düğünümüz</h3>
+                        <p class="text-slate-600">Hayal ettiğimiz o güzel gün geldi çattı! Birlikte yeni bir hayata adım
+                            atıyoruz.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="todo" class="py-12">
+            <div class="container mx-auto px-4">
+                <h2 class="text-center mb-8">Birlikte Yapılacaklar Listesi</h2>
+                <p class="text-center text-slate-600 mb-12 max-w-2xl mx-auto">
+                    Haydi, birlikte gerçekleştirmek istediğimiz hayalleri ve eğlenceli planları buraya ekleyelim. Her
+                    tamamladığımızda birini üzerini çizmek ne kadar keyifli olacak!
+                </p>
+                <div class="max-w-md mx-auto mb-8">
+                    <div class="flex space-x-2">
+                        <input id="todoInput" type="text" class="flex-1 p-3 border rounded-lg" placeholder="Ekle">
+                        <button id="addTodoBtn"
+                            class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-red-500 hover:scale-105 transition-all">Ekle</button>
+                    </div>
+                </div>
+                <ul id="todoList" class="max-w-md mx-auto space-y-4">
+                    <li class="bg-slate-50 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                        <span class="text-lg text-slate-700">Deniz kenarında piknik yapmak</span>
+                        <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2">X</button>
+                    </li>
+                    <li class="bg-slate-50 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                        <span class="text-lg text-slate-700">Yeni bir dil öğrenmeye başlamak</span>
+                        <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2">X</button>
+                    </li>
+                    <li class="bg-slate-50 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                        <span class="text-lg text-slate-700">Beraber bir film maratonu yapmak</span>
+                        <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2">X</button>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="message" class="py-12">
+            <div class="container mx-auto px-4">
+                <h2 class="text-center mb-8">Bana Tatlı Bir Not Bırak</h2>
+                <p class="text-center text-slate-600 mb-12 max-w-2xl mx-auto">
+                    İçinden geçenleri yaz, kalbimi ısıt. Bu küçük notlar, sana olan sevgimin bir göstergesi.
+                </p>
+                <form id="messageForm" class="max-w-md mx-auto space-y-4">
+                    
+                    <div>
+                        <textarea name="message" class="w-full p-3 border rounded-lg" rows="5"
+                            placeholder="Mesajın"></textarea>
+                    </div>
+                    <button type="submit"
+                        class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-500 hover:scale-105 transition-all w-full">Notu
+                        Gönder</button>
+                </form>
+                <p id="messageStatus" class="text-center text-green-600 mt-4 hidden">Mesajın başarıyla gönderildi!</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <audio controls autoplay loop class="hidden">
+        <source src="sounds/backsound2.mp3" type="audio/mpeg">
+    </audio>
+</body>
+
+</html>
