@@ -112,6 +112,13 @@ body {
     transition: color 0.2s;
 }
 
+button,
+.nav-link,
+.gallery-item,
+#spinButton {
+  touch-action: manipulation;
+}
+
 .close-button:hover,
 .close-button:focus {
     color: #ccc;
