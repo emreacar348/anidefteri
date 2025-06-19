@@ -1,42 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ----------------------------
-    // Navigasyon Aktif Bağlantı İzleme
-    // ----------------------------
-    // Geri Sayım Sayaç Logic
-    function startCountdown() {
-        const countdownDate = new Date('AUGUST 24, 2025 00:00:00').getTime(); // Bir sonraki yıldönümü
-        const daysEl = document.getElementById('days');
-        const hoursEl = document.getElementById('hours');
-        const minutesEl = document.getElementById('minutes');
-        const secondsEl = document.getElementById('seconds');
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = countdownDate - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            daysEl.textContent = days;
-            hoursEl.textContent = hours;
-            minutesEl.textContent = minutes;
-            secondsEl.textContent = seconds;
-
-            if (distance < 0) {
-                // Yıldönümü geçtiğinde, bir sonraki yıla geç
-                countdownDate = new Date(countdownDate + 1000 * 60 * 60 * 24 * 365).getTime();
-            }
+    // Session control (Oturum kontrolü)
+    if (window.location.pathname.includes('index.html')) {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (!isLoggedIn) {
+            window.location.href = 'login.html';
         }
-
-        updateCountdown(); // İlk çalıştırma
-        setInterval(updateCountdown, 1000); // Her saniye güncelle
     }
 
-    if (document.getElementById('countdown-timer')) {
-        startCountdown();
+    // Login Form Logic (Giriş Formu Mantığı)
+    const loginForm = document.getElementById('loginForm');
+    const errorMessage = document.getElementById('errorMessage');
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            const validUsername = 'sevgilim';
+            const validPassword = 'askim123';
+
+            if (username === validUsername && password === validPassword) {
+                errorMessage.style.display = 'none';
+                localStorage.setItem('isLoggedIn', 'true'); // Save session (Oturumu kaydet)
+                window.location.href = 'index.html'; // Redirect after successful login (Başarılı giriş sonrası index.html'ye yönlendirme)
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        });
     }
+
+    // Navigation Active Link Tracking (Navigasyon Aktif Bağlantı İzleme)
     const navLinks = document.querySelectorAll('#main-nav a');
     const sections = document.querySelectorAll('main section');
 
@@ -55,9 +50,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sections.forEach(section => observer.observe(section));
 
-    // ----------------------------
-    // Etkinlik Çarkı Logic
-    // ----------------------------
+    // Countdown Timer Logic (Geri Sayım Sayaç Mantığı)
+    function startCountdown() {
+        let countdownDate = new Date('AUGUST 24, 2025 00:00:00').getTime(); // Changed to 'let'
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            let distance = countdownDate - now;
+
+            if (distance < 0) {
+                // If the countdown has passed, set it for the next year
+                // This approach can be refined for exact yearly repeat considering leap years
+                const nextYear = new Date();
+                nextYear.setTime(countdownDate);
+                nextYear.setFullYear(nextYear.getFullYear() + 1);
+                countdownDate = nextYear.getTime();
+                distance = countdownDate - now; // Recalculate distance for the new date
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            daysEl.textContent = days;
+            hoursEl.textContent = hours;
+            minutesEl.textContent = minutes;
+            secondsEl.textContent = seconds;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    }
+
+    if (document.getElementById('countdown-timer')) {
+        startCountdown();
+    }
+
+    // Activity Wheel Logic (Etkinlik Çarkı Mantığı)
     const activities = [
         { id: 'sinema', title: 'Evde Sinema Gecesi', description: 'Beraber battaniyeye sarılıp film izleyelim.', icon: '🍿' },
         { id: 'kurabiye', title: 'Kurabiye Yapımı', description: 'Birlikte mutfağa girip kurabiye yapalım.', icon: '🍪' },
@@ -120,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedActivity = activities[randomIndex];
 
         const segmentCenterAngle = (randomIndex * degreesPerSegment) + (degreesPerSegment / 2);
-        const targetRotation = (360 - segmentCenterAngle) + (360 * 10);
+        const targetRotation = (360 - segmentCenterAngle) + (360 * 10); // Spin multiple times
 
         const duration = 5000;
         let startTime = null;
@@ -161,9 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         spinButton.addEventListener('click', startSpin);
     }
 
-    // ----------------------------
-    // Fotoğraf Galerisi Modal Logic
-    // ----------------------------
+    // Photo Gallery Modal Logic (Fotoğraf Galerisi Modal Mantığı)
     const galleryImages = document.querySelectorAll('#gallery-grid img');
     const photoModal = document.getElementById('photoModal');
     const modalImage = document.getElementById('modalImage');
@@ -186,9 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ----------------------------
-    // Yapılacaklar Listesi Logic
-    // ----------------------------
+    // To-Do List Logic (Yapılacaklar Listesi Mantığı)
     const todoInput = document.getElementById('todoInput');
     const addTodoBtn = document.getElementById('addTodoBtn');
     const todoList = document.getElementById('todoList');
@@ -224,15 +254,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    document.querySelectorAll('.delete-todo-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.target.closest('li').remove();
-        });
-    });
+    // This loop is redundant as new delete buttons are attached to click listeners when created.
+    // It will only attach listeners to existing items on page load, not new ones.
+    // document.querySelectorAll('.delete-todo-btn').forEach(button => {
+    //     button.addEventListener('click', (e) => {
+    //         e.target.closest('li').remove();
+    //     });
+    // });
 
-    // ----------------------------
-    // Mesaj Kutusu Gönderim Logic
-    // ----------------------------
+    // Message Box Submission Logic (Mesaj Kutusu Gönderim Mantığı)
     const messageForm = document.getElementById('messageForm');
     const messageStatus = document.getElementById('messageStatus');
 

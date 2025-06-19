@@ -6,16 +6,20 @@
 }
 
 body {
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
 }
 
 #main-nav {
-  padding-top: env(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: var(--background);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 
 .nav-link.active {
     background-color: var(--primary);
@@ -25,9 +29,9 @@ body {
 
 .chart-container,
 .wheel-container {
-  max-width: 100%;
-  width: min(350px, 90vw);
-  height: auto;
+    max-width: 100%;
+    width: min(350px, 90vw);
+    height: auto;
 }
 
 @media (min-width: 768px) {
@@ -35,14 +39,6 @@ body {
         height: 350px;
         max-width: 350px;
     }
-}
-
-#main-nav {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background-color: var(--background);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .wheel-container {
@@ -72,7 +68,6 @@ body {
     z-index: 10;
 }
 
-/* Modal Stilleri */
 .modal {
     position: fixed;
     z-index: 1000;
@@ -99,6 +94,7 @@ body {
     max-height: 90%;
     object-fit: contain;
     border-radius: 0.5rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .close-button {
@@ -116,7 +112,7 @@ button,
 .nav-link,
 .gallery-item,
 #spinButton {
-  touch-action: manipulation;
+    touch-action: manipulation;
 }
 
 .close-button:hover,
@@ -129,6 +125,7 @@ button,
 button, .nav-link {
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
+
 button:hover, .nav-link:hover {
     background-color: var(--accent);
     transform: scale(1.05);
@@ -140,14 +137,10 @@ button:hover, .nav-link:hover {
     fill: var(--primary);
 }
 
-/*? İMG STİLLERİ */
-
 img, .card {
     border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-/*! H ETİKET GÜNCELLEMELERİ BAŞLANGIÇ !*/
 
 h1 {
     font-size: 2.5rem;
@@ -156,8 +149,14 @@ h1 {
 }
 
 h2 {
-    font-size: 1.75rem;
-    font-weight: 600;
+    font-family: 'Caveat', cursive;
+    font-size: 2rem;
+    color: #4f46e5;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 p {
@@ -167,127 +166,162 @@ p {
 
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
 
-h2 {
-    font-family: 'Caveat', cursive;
-    font-size: 2rem;
-    color: #4f46e5;
-}
-
-h1,
-h2 {
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-/*! H ETİKET GÜNCELLEMELERİ BİTİŞ !*/
-
-/*todo */
-/* Instagram Tarzı Galeri Stilleri */
 #gallery-grid {
-  display: grid;
-  gap: 1rem; /* Grid öğeleri arasındaki boşluk */
+    display: grid;
+    gap: 1rem;
 }
 
 .gallery-item {
-  aspect-ratio: 1/1; /* Kare görünüm için */
-  overflow: hidden;
-  border-radius: 0.5rem; /* Hafif yuvarlatılmış köşeler */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative; /* Alt yazı için */
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
 }
 
 .gallery-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Resmi kareye sığdırır, kırpma yapar */
-  transition: transform 0.3s ease;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
 .gallery-item:hover {
-  transform: scale(1.05); /* Hover'da hafif büyüme */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Hafif gölge */
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .gallery-item:hover .bg-black {
-  opacity: 1; /* Hover'da alt yazıyı göster */
+    opacity: 1;
 }
 
 .gallery-item .bg-black {
-  opacity: 0;
-  transition: opacity 0.3s ease;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-/* Profil Başlığı Stilleri */
 .profile-header img {
-  border: 2px solid var(--primary);
+    border: 2px solid var(--primary);
 }
 
 .profile-header h3 {
-  font-family: 'Caveat', cursive;
+    font-family: 'Caveat', cursive;
 }
 
-/* Modal Stillerini Güncelle */
-.modal-content {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 0.5rem;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* Responsive Ayarları */
-@media (min-width: 640px) {
-  #gallery-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  #gallery-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
-  }
-  .gallery-item img {
-    object-fit: cover;
-  }
-}
-
-/*? Geri Sayım Sayaç Stilleri */
 #countdown-timer {
-  display: grid;
-  gap: 1rem;
+    display: grid;
+    gap: 1rem;
 }
 
 #countdown-timer > div {
-  background-color: var(--background);
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+    background-color: var(--background);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
 }
 
 #countdown-timer > div:hover {
-  transform: scale(1.05); /* Hafif büyüme efekti */
+    transform: scale(1.05);
 }
 
 #countdown-timer span {
-  font-family: 'Caveat', cursive;
-  color: var(--primary);
+    font-family: 'Caveat', cursive;
+    color: var(--primary);
 }
 
 #countdown-timer p {
-  font-size: 0.875rem;
-  color: var(--text);
+    font-size: 0.875rem;
+    color: var(--text);
 }
 
-/* Responsive Ayarları */
+@media (min-width: 640px) {
+    #gallery-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
 @media (max-width: 480px) {
-  #countdown-timer {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
-  }
-  #countdown-timer > div {
-    padding: 0.5rem;
-    font-size: 0.85rem;
-  }
-  #countdown-timer span {
-    font-size: 1.5rem;
-  }
+    #gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+    .gallery-item img {
+        object-fit: cover;
+    }
+    #countdown-timer {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+    #countdown-timer > div {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+    #countdown-timer span {
+        font-size: 1.5rem;
+    }
+}
+
+/* Giriş Formu Stilleri */
+.login-container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    margin: 2rem auto;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--primary);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+}
+
+.login-container button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.login-container button:hover {
+    background-color: var(--accent);
+    transform: scale(1.05);
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: none;
+    text-align: center;
 }
