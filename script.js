@@ -1,42 +1,29 @@
+// script.js
+// Bu kod bloğu, DOMContentLoaded'dan önce çalışmalıdır,
+// çünkü sayfa yüklenmeden önce yönlendirme kontrolü yapılması gerekir.
+
+// **********************************************
+// ÖNEMLİ: Kimlik Doğrulama Kontrolü (Client-side, güvenlik için YETERSİZ)
+// **********************************************
+// Bu, sadece frontend tarafında bir simülasyondur.
+// Gerçek uygulamada bu kontrol backend tarafından yapılmalı ve güvenli oturumlar kullanılmalıdır.
+
+// Sadece index.html'ye erişimi kısıtla, login.html için değil.
+const currentPage = window.location.pathname.split('/').pop(); // Sadece dosya adını al
+
+if (currentPage === 'index.html' || currentPage === '') { // Ana sayfa veya kök dizin ise
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn'); // Oturum durumunu kontrol et
+
+    // Eğer kullanıcı giriş yapmamışsa, login sayfasına yönlendir
+    if (!isLoggedIn) {
+        window.location.replace('login.html'); // Tarayıcı geçmişinde bırakmamak için replace kullan
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------
     // Navigasyon Aktif Bağlantı İzleme
     // ----------------------------
-    // Geri Sayım Sayaç Logic
-    function startCountdown() {
-        const countdownDate = new Date('AUGUST 24, 2025 00:00:00').getTime(); // Bir sonraki yıldönümüAdd commentMore actions
-        const daysEl = document.getElementById('days');
-        const hoursEl = document.getElementById('hours');
-        const minutesEl = document.getElementById('minutes');
-        const secondsEl = document.getElementById('seconds');
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = countdownDate - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            daysEl.textContent = days;
-            hoursEl.textContent = hours;
-            minutesEl.textContent = minutes;
-            secondsEl.textContent = seconds;
-
-            if (distance < 0) {
-                // Yıldönümü geçtiğinde, bir sonraki yıla geç
-                countdownDate = new Date(countdownDate + 1000 * 60 * 60 * 24 * 365).getTime();
-            }
-        }
-
-        updateCountdown(); // İlk çalıştırma
-        setInterval(updateCountdown, 1000); // Her saniye güncelle
-    }
-
-    if (document.getElementById('countdown-timer')) {
-        startCountdown();
-    }
     const navLinks = document.querySelectorAll('#main-nav a');
     const sections = document.querySelectorAll('main section');
 
@@ -56,6 +43,53 @@ document.addEventListener('DOMContentLoaded', () => {
     sections.forEach(section => observer.observe(section));
 
     // ----------------------------
+    // Geri Sayım Sayaç Logic
+    // ----------------------------
+    function startCountdown() {
+        // Hedef yıl dönümü: Başlangıç tarihi olarak 24 Ağustos 2024'ü alalım.
+        let targetDate = new Date('AUGUST 24, 2024 00:00:00').getTime();
+
+        // Eğer hedef tarih geçmişse, bir sonraki yılın aynı tarihine ayarla
+        while (targetDate < new Date().getTime()) {
+            targetDate = new Date(new Date(targetDate).setFullYear(new Date(targetDate).getFullYear() + 1)).getTime();
+        }
+
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            let distance = targetDate - now;
+
+            // Eğer yıldönümü anı geçmişse, hemen bir sonraki yılı hedefle ve tekrar hesapla
+            if (distance < 0) {
+                targetDate = new Date(new Date(targetDate).setFullYear(new Date(targetDate).getFullYear() + 1)).getTime();
+                distance = targetDate - now; // Yeni mesafeyi tekrar hesapla
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            daysEl.textContent = days;
+            hoursEl.textContent = hours;
+            minutesEl.textContent = minutes;
+            secondsEl.textContent = seconds;
+        }
+
+        updateCountdown(); // İlk çalıştırma
+        setInterval(updateCountdown, 1000); // Her saniye güncelle
+    }
+
+    // Sadece countdown-timer elementi varsa başlat
+    if (document.getElementById('countdown-timer')) {
+        startCountdown();
+    }
+
+    // ----------------------------
     // Etkinlik Çarkı Logic
     // ----------------------------
     const activities = [
@@ -65,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'temizlik', title: 'Birlikte Temizlik', description: 'Müzik açıp dans ederek evi toparlayalım.', icon: '🧼' },
         { id: 'resim', title: 'Resim Yapma', description: 'Beraber tuvale veya dijitale duygularımızı dökelim.', icon: '🎨' },
         { id: 'kitap', title: 'Kitap Okuma Saati', description: 'Aynı kitabı okuyup sonra sohbet edelim.', icon: '📚' },
-        { id: 'yoga', title: 'Yoga/Stretching', description: 'Beraber rahatlayalım, nefes alalım.', icon: '🧘' },
+        { id: 'yoga', title: 'Yoga/Stretching', description: 'Beraber rahatlayalım, nefes alalım.', icon: '🧘‍' },
         { id: 'muzik', title: 'Müzik Gecesi', description: 'Sevdiğimiz şarkılarla mini bir konser yapalım.', icon: '🎶' },
         { id: 'yemek', title: 'Birlikte Yemek Tarifi Deneme', description: 'Yeni bir tarif bulup deneyelim.', icon: '🧑‍🍳' }
     ];
@@ -157,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
+    // Sadece spinButton elementi varsa dinleyici ekle
     if (spinButton) {
         spinButton.addEventListener('click', startSpin);
     }
@@ -173,42 +208,55 @@ document.addEventListener('DOMContentLoaded', () => {
         img.addEventListener('click', () => {
             modalImage.src = img.dataset.full;
             photoModal.classList.add('show');
+            modalImage.focus(); // Modal açıldığında odak yönetimini iyileştir
         });
     });
 
-    closeButton.addEventListener('click', () => {
-        photoModal.classList.remove('show');
-    });
+    if (closeButton) { // closeButton elementi varsa dinleyici ekle
+        closeButton.addEventListener('click', () => {
+            photoModal.classList.remove('show');
+        });
+    }
 
-    photoModal.addEventListener('click', (e) => {
-        if (e.target === photoModal) {
+    if (photoModal) { // photoModal elementi varsa dinleyici ekle
+        photoModal.addEventListener('click', (e) => {
+            if (e.target === photoModal) {
+                photoModal.classList.remove('show');
+            }
+        });
+    }
+
+    // Klavye ile kapatma (ESC tuşu)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && photoModal && photoModal.classList.contains('show')) {
             photoModal.classList.remove('show');
         }
     });
 
     // ----------------------------
-    // Yapılacaklar Listesi Logic
+    // Yapılacaklar Listesi Logic (Event Delegation ile)
     // ----------------------------
     const todoInput = document.getElementById('todoInput');
     const addTodoBtn = document.getElementById('addTodoBtn');
     const todoList = document.getElementById('todoList');
 
+    function createTodoItem(text) {
+        const listItem = document.createElement('li');
+        listItem.className = 'bg-slate-50 p-4 rounded-lg shadow-sm flex items-center justify-between';
+        listItem.innerHTML = `
+            <span class="text-lg text-slate-700">${text}</span>
+            <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2" aria-label="Görevi sil">X</button>
+        `;
+        return listItem;
+    }
+
     function addTodoItem() {
         const todoText = todoInput.value.trim();
         if (todoText !== '') {
-            const listItem = document.createElement('li');
-            listItem.className = 'bg-slate-50 p-4 rounded-lg shadow-sm flex items-center justify-between';
-            listItem.innerHTML = `
-                <span class="text-lg text-slate-700">${todoText}</span>
-                <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2">X</button>
-            `;
-            todoList.appendChild(listItem);
+            const newItem = createTodoItem(todoText);
+            todoList.appendChild(newItem);
             todoInput.value = '';
-
-            const deleteButton = listItem.querySelector('.delete-todo-btn');
-            deleteButton.addEventListener('click', () => {
-                listItem.remove();
-            });
+            todoInput.focus(); // Yeni öğe eklendikten sonra girişe odaklan
         }
     }
 
@@ -224,25 +272,45 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    document.querySelectorAll('.delete-todo-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.target.closest('li').remove();
+    // Olay Delegasyonu: todoList'e bir dinleyici ekleyerek tüm silme butonlarını yönet
+    if (todoList) {
+        todoList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('delete-todo-btn')) {
+                e.target.closest('li').remove();
+            }
         });
-    });
+    }
 
     // ----------------------------
     // Mesaj Kutusu Gönderim Logic
     // ----------------------------
     const messageForm = document.getElementById('messageForm');
     const messageStatus = document.getElementById('messageStatus');
+    const messageTextarea = document.getElementById('messageTextarea');
 
     if (messageForm) {
         messageForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            messageStatus.classList.remove('hidden');
+
+            if (messageTextarea.value.trim() === '') {
+                messageStatus.textContent = 'Lütfen bir mesaj yazın.';
+                messageStatus.classList.remove('hidden', 'text-green-600');
+                messageStatus.classList.add('text-red-600');
+                setTimeout(() => {
+                    messageStatus.classList.add('hidden');
+                    messageStatus.classList.remove('text-red-600');
+                }, 3000);
+                return;
+            }
+
+            // Simülasyon devam ediyor, backend entegrasyonu için yorum satırı örneği bırakıldı
+            messageStatus.textContent = 'Mesajın başarıyla gönderildi!';
+            messageStatus.classList.remove('hidden', 'text-red-600');
+            messageStatus.classList.add('text-green-600');
             messageForm.reset();
             setTimeout(() => {
                 messageStatus.classList.add('hidden');
+                messageStatus.classList.remove('text-green-600', 'text-red-600');
             }, 3000);
         });
     }

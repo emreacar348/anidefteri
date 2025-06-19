@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap - Bizim Dünyamız</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%);
+        }
+        .login-container {
+            background-color: white;
+            padding: 2.5rem; /* 40px */
+            border-radius: 1rem; /* 16px */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 400px;
+        }
+        .form-input {
+            padding: 0.75rem 1rem; /* 12px 16px */
+            border: 1px solid #D1D5DB; /* gray-300 */
+            border-radius: 0.5rem; /* 8px */
+            width: 100%;
+            font-size: 1rem;
+        }
+        .form-button {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem; /* 12px 24px */
+            border-radius: 0.5rem; /* 8px */
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .form-button:hover {
+            background-color: var(--accent);
+            transform: scale(1.02);
+        }
+        .error-message {
+            color: #EF4444; /* red-500 */
+            font-size: 0.875rem; /* text-sm */
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <div class="login-container">
+        <h1 class="text-center text-3xl font-bold mb-8 text-indigo-700">Hoş Geldin!</h1>
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Kullanıcı Adı</label>
+                <input type="text" id="username" name="username" class="form-input" placeholder="Kullanıcı Adınız" required aria-required="true">
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Şifre</label>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Şifreniz" required aria-required="true">
+            </div>
+            <p id="loginError" class="error-message hidden" role="alert" aria-live="assertive"></p>
+            <button type="submit" class="form-button">Giriş Yap</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const loginError = document.getElementById('loginError');
+
+            // --- Gelecekte bir backend'den gelecek kullanıcı bilgileri içinPlaceholder ---
+            const CORRECT_USERNAME = 'esim';
+            const CORRECT_PASSWORD = 'seniseviyorum';
+            // -------------------------------------------------------------------------
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const enteredUsername = usernameInput.value.trim();
+                const enteredPassword = passwordInput.value.trim();
+
+                if (enteredUsername === CORRECT_USERNAME && enteredPassword === CORRECT_PASSWORD) {
+                    // Başarılı giriş
+                    loginError.classList.add('hidden');
+                    // Oturum açıldığını işaretle
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    // Kullanıcıyı ana sayfaya yönlendir
+                    window.location.href = 'index.html';
+                } else {
+                    // Hatalı giriş
+                    loginError.textContent = 'Hatalı kullanıcı adı veya şifre. Lütfen tekrar deneyin.';
+                    loginError.classList.remove('hidden');
+                    passwordInput.value = '';
+                    usernameInput.focus();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

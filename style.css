@@ -1,16 +1,28 @@
 /* CSS Stilleri */
 :root {
     --primary: #4f46e5;
-    --accent: #FF6B6B;
+    --accent: #ef4444; /* Kırmızı tonunu güncelledim, Tailwind red-500 ile uyumlu olması için */
     --background: #F9FAFB;
     --text: #1F2937;
 }
 
 body {
-    /* font-family: 'Inter', sans-serif;
-    background-color: var(--background);
-    color: var(--text); */
     background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%);
+    /* font-family: 'Inter', sans-serif; - Tailwind font-sans zaten varsayılanı yönetiyor */
+    /* color ve background-color da body için genel olarak Tailwind tarafından yönetilebilir veya root değişkenlerinden gelebilir. */
+}
+
+/* Ekran okuyucular için gizli metinler */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 
@@ -67,7 +79,7 @@ body {
     height: 0;
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
-    border-top: 30px solid #ef4444;
+    border-top: 30px solid var(--accent); /* Pointer rengini accent ile eşitledim */
     z-index: 10;
 }
 
@@ -162,7 +174,7 @@ p {
 h2 {
     font-family: 'Caveat', cursive;
     font-size: 2rem;
-    color: #4f46e5;
+    color: var(--primary); /* Direkt hex kod yerine değişken kullanıldı */
 }
 
 h1,
@@ -271,3 +283,20 @@ h2 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
+/* Yeni eklenen animasyon */
+@keyframes fadeInUpx {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUpx 0.5s ease-out forwards;
+}
+

@@ -4,21 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bizim Dünyamız</title>
+    <title>Bizim Dünyamız - Sevgili Eşim İçin Özel Sayfa</title>
+    <meta name="description" content="Eşime özel hazırlanmış, anılarımızı, etkinliklerimizi ve planlarımızı içeren kişisel web sayfası.">
+    <meta name="keywords" content="eşime özel, anılarımız, evlilik, sürpriz, etkinlik, fotoğraf galerisi">
+
+    <meta property="og:title" content="Bizim Dünyamız - Sevgili Eşim İçin">
+    <meta property="og:description" content="Seninle geçirdiğimiz her anın değerini bilmek, eğlenceli yeni maceralara atılmak ve en güzel anılarımızı bir arada tutmak için hazırlandı.">
+    <meta property="og:image" content="https://www.seninsiten.com/images/og-image.jpg"> <meta property="og:url" content="https://www.seninsiten.com"> <meta property="og:type" content="website">
+
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-</head>Add commentMore actions
+</head>
 
 <body class="font-sans antialiased">
-    <nav id="main-nav" class="py-4">
+    <nav id="main-nav" class="py-4" role="navigation" aria-label="Ana Navigasyon">
         <div class="container mx-auto px-4 flex justify-center space-x-4">
-            <a href="#welcome" class="nav-link px-4 py-2 rounded-lg">Hoş Geldin</a>
-            <a href="#activity" class="nav-link px-4 py-2 rounded-lg">Etkinlik Seçici</a>
-            <a href="#gallery" class="nav-link px-4 py-2 rounded-lg">Fotoğraf Galerisi</a>
-            <a href="#memories" class="nav-link px-4 py-2 rounded-lg">Anılarımız</a>
-            <a href="#todo" class="nav-link px-4 py-2 rounded-lg">Yapılacaklar Listesi</a>
-            <a href="#message" class="nav-link px-4 py-2 rounded-lg">Mesaj Kutusu</a>
+            <a href="#welcome" class="nav-link px-4 py-2 rounded-lg" aria-label="Hoş Geldin bölümüne git">Hoş Geldin</a>
+            <a href="#activity" class="nav-link px-4 py-2 rounded-lg" aria-label="Etkinlik Seçici bölümüne git">Etkinlik Seçici</a>
+            <a href="#gallery" class="nav-link px-4 py-2 rounded-lg" aria-label="Fotoğraf Galerisi bölümüne git">Fotoğraf Galerisi</a>
+            <a href="#memories" class="nav-link px-4 py-2 rounded-lg" aria-label="Anılarımız bölümüne git">Anılarımız</a>
+            <a href="#todo" class="nav-link px-4 py-2 rounded-lg" aria-label="Yapılacaklar Listesi bölümüne git">Yapılacaklar Listesi</a>
+            <a href="#message" class="nav-link px-4 py-2 rounded-lg" aria-label="Mesaj Kutusu bölümüne git">Mesaj Kutusu</a>
         </div>
     </nav>
 
@@ -75,10 +82,11 @@
                 </div>
                 <div class="text-center mt-8">
                     <button id="spinButton"
-                        class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-500 hover:scale-105 transition-all">Çarkı
+                        class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-500 hover:scale-105 transition-all"
+                        aria-label="Çarkı çevirerek etkinlik seç">Çarkı
                         Çevir!</button>
                     <p class="text-slate-500 mt-4">Çarkı çevirerek eğlenceli bir etkinlik seçin!</p>
-                    <div id="selectedActivityDisplay" class="mt-6"></div>
+                    <div id="selectedActivityDisplay" class="mt-6" role="status" aria-live="polite"></div>
                 </div>
             </div>
         </section>
@@ -100,7 +108,7 @@
                 </p>
                 <div id="gallery-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     <div class="gallery-item relative">
-                        <img src="images/iftar.jpeg" data-full="images/iftar.jpeg" alt="Anı 1"
+                        <img src="images/iftar.jpeg" data-full="images/iftar.jpeg" alt="Güzel bir iftar anısı"
                             class="w-full h-full object-cover cursor-pointer" loading="lazy">
                         <div
                             class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -108,7 +116,7 @@
                         </div>
                     </div>
                     <div class="gallery-item relative">
-                        <img src="images/ilk-foto.jpeg" data-full="images/ilk-foto.jpeg" alt="Anı 2"
+                        <img src="images/ilk-foto.jpeg" data-full="images/ilk-foto.jpeg" alt="Birlikte ilk fotoğrafımız"
                             class="w-full h-full object-cover cursor-pointer" loading="lazy">
                         <div
                             class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -116,7 +124,7 @@
                         </div>
                     </div>
                     <div class="gallery-item relative">
-                        <img src="images/tanisma.jpeg" data-full="images/tanisma.jpeg" alt="Anı 3"
+                        <img src="images/tanisma.jpeg" data-full="images/tanisma.jpeg" alt="İlk tanışma anısı"
                             class="w-full h-full object-cover cursor-pointer" loading="lazy">
                         <div
                             class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -124,7 +132,7 @@
                         </div>
                     </div>
                     <div class="gallery-item relative">
-                        <img src="images/el-pence.jpeg" data-full="images/el-pence.jpeg" alt="Anı 4"
+                        <img src="images/el-pence.jpeg" data-full="images/el-pence.jpeg" alt="Yürüyüş anısı"
                             class="w-full h-full object-cover cursor-pointer" loading="lazy">
                         <div
                             class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -132,7 +140,7 @@
                         </div>
                     </div>
                     <div class="gallery-item relative">
-                        <img src="images/uzun-yol-arkadasim.jpeg" data-full="images/uzun-yol-arkadasim.jpeg" alt="Anı 5"
+                        <img src="images/uzun-yol-arkadasim.jpeg" data-full="images/uzun-yol-arkadasim.jpeg" alt="Uzun yol arkadaşım anısı"
                             class="w-full h-full object-cover cursor-pointer" loading="lazy">
                         <div
                             class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -140,7 +148,7 @@
                         </div>
                     </div>
                     <div class="gallery-item relative">
-                        <img src="images/omuz-omuza.jpeg" data-full="images/omuz-omuza.jpeg" alt="Anı 6"
+                        <img src="images/omuz-omuza.jpeg" data-full="images/omuz-omuza.jpeg" alt="Akşam yemeği anısı"
                             class="w-full h-full object-cover cursor-pointer" loading="lazy">
                         <div
                             class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -148,7 +156,7 @@
                         </div>
                     </div>
                     <div class="gallery-item relative">
-                        <img src="images/el-ele.jpeg" data-full="images/el-ele.jpeg" alt="Anı 7"
+                        <img src="images/el-ele.jpeg" data-full="images/el-ele.jpeg" alt="Konser gecesi anısı"
                             class="w-full h-full object-cover cursor-pointer" loading="lazy">
                         <div
                             class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -156,7 +164,7 @@
                         </div>
                     </div>
                     <div class="gallery-item relative">
-                        <img src="images/yan-yana.jpeg" data-full="images/yan-yana.jpeg" alt="Anı 8"
+                        <img src="images/yan-yana.jpeg" data-full="images/yan-yana.jpeg" alt="Doğum günü kutlaması anısı"
                             class="w-full h-full object-cover cursor-pointer" loading="lazy">
                         <div
                             class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -165,8 +173,8 @@
                     </div>
                 </div>
             </div>
-            <div id="photoModal" class="modal">
-                <span class="close-button">×</span>
+            <div id="photoModal" class="modal" role="dialog" aria-modal="true" aria-label="Fotoğrafı büyüt">
+                <span class="close-button" role="button" aria-label="Kapat">×</span>
                 <img id="modalImage" class="modal-content" src="" alt="Büyük resim">
             </div>
         </section>
@@ -217,23 +225,25 @@
                 </p>
                 <div class="max-w-md mx-auto mb-8">
                     <div class="flex space-x-2">
-                        <input id="todoInput" type="text" class="flex-1 p-3 border rounded-lg" placeholder="Ekle">
+                        <label for="todoInput" class="sr-only">Yeni yapılacak görev</label>
+                        <input id="todoInput" type="text" class="flex-1 p-3 border rounded-lg" placeholder="Ekle" aria-label="Yeni yapılacak görevi buraya yazın">
                         <button id="addTodoBtn"
-                            class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-red-500 hover:scale-105 transition-all">Ekle</button>
+                            class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-red-500 hover:scale-105 transition-all"
+                            aria-label="Yapılacaklar listesine ekle">Ekle</button>
                     </div>
                 </div>
                 <ul id="todoList" class="max-w-md mx-auto space-y-4">
                     <li class="bg-slate-50 p-4 rounded-lg shadow-sm flex items-center justify-between">
                         <span class="text-lg text-slate-700">Deniz kenarında piknik yapmak</span>
-                        <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2">X</button>
+                        <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2" aria-label="Görevi sil">X</button>
                     </li>
                     <li class="bg-slate-50 p-4 rounded-lg shadow-sm flex items-center justify-between">
                         <span class="text-lg text-slate-700">Yeni bir dil öğrenmeye başlamak</span>
-                        <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2">X</button>
+                        <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2" aria-label="Görevi sil">X</button>
                     </li>
                     <li class="bg-slate-50 p-4 rounded-lg shadow-sm flex items-center justify-between">
                         <span class="text-lg text-slate-700">Beraber bir film maratonu yapmak</span>
-                        <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2">X</button>
+                        <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2" aria-label="Görevi sil">X</button>
                     </li>
                 </ul>
             </div>
@@ -246,16 +256,18 @@
                     İçinden geçenleri yaz, kalbimi ısıt. Bu küçük notlar, sana olan sevgimin bir göstergesi.
                 </p>
                 <form id="messageForm" class="max-w-md mx-auto space-y-4">
-                    
+
                     <div>
-                        <textarea name="message" class="w-full p-3 border rounded-lg" rows="5"
-                            placeholder="Mesajın"></textarea>
+                        <label for="messageTextarea" class="sr-only">Mesajın</label>
+                        <textarea id="messageTextarea" name="message" class="w-full p-3 border rounded-lg" rows="5"
+                            placeholder="Mesajın" aria-label="Mesajınızı buraya yazın"></textarea>
                     </div>
                     <button type="submit"
-                        class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-500 hover:scale-105 transition-all w-full">Notu
+                        class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-500 hover:scale-105 transition-all w-full"
+                        aria-label="Notu gönder">Notu
                         Gönder</button>
                 </form>
-                <p id="messageStatus" class="text-center text-green-600 mt-4 hidden">Mesajın başarıyla gönderildi!</p>
+                <p id="messageStatus" class="text-center text-green-600 mt-4 hidden" role="status" aria-live="polite">Mesajın başarıyla gönderildi!</p>
             </div>
         </section>
     </main>
