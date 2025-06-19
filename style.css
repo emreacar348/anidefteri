@@ -300,3 +300,63 @@ h2 {
     animation: fadeInUpx 0.5s ease-out forwards;
 }
 
+/*! Ses Düğmesi Stilleri */
+
+/* style.css dosyasının sonuna eklenebilir */
+
+/* Müzik çalar konteyneri */
+#music-player-container {
+    /* fixed, bottom-4, right-4, z-50, vb. zaten Tailwind ile HTML'de verilmiş */
+}
+
+/* Müzik paneli varsayılan gizli ve animasyon için başlangıç durumu */
+#music-panel {
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Animasyon geçişleri */
+    transform: translateY(20px); /* Başlangıçta hafifçe aşağıda */
+    opacity: 0; /* Başlangıçta görünmez */
+    visibility: hidden; /* Click olaylarını engellemek için */
+}
+
+/* Panel gösterildiğinde */
+#music-panel:not(.hidden) { /* .hidden sınıfı yoksa göster */
+    transform: translateY(0); /* Normal konum */
+    opacity: 1; /* Tamamen görünür */
+    visibility: visible; /* Click olaylarını etkinleştir */
+}
+
+/* Ses sürgüsü stili (isteğe bağlı, tarayıcı varsayılanından daha şık) */
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary); /* Temel renk */
+    cursor: pointer;
+    box-shadow: 0 0 0 2px rgba(var(--primary), 0.3);
+    transition: background 0.3s ease;
+}
+
+#volume-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    box-shadow: 0 0 0 2px rgba(var(--primary), 0.3);
+    transition: background 0.3s ease;
+}
+
+#volume-slider::-webkit-slider-runnable-track {
+    background: #e2e8f0; /* gray-200 */
+    border-radius: 4px;
+    height: 4px;
+}
+
+#volume-slider::-moz-range-track {
+    background: #e2e8f0; /* gray-200 */
+    border-radius: 4px;
+    height: 4px;
+}
+
+/*! Ses düğmesi stili */

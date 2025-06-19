@@ -68,39 +68,33 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const loginForm = document.getElementById('loginForm');
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-            const loginError = document.getElementById('loginError');
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginError = document.getElementById('loginError');
 
-            // --- Gelecekte bir backend'den gelecek kullanıcı bilgileri içinPlaceholder ---
-            const CORRECT_USERNAME = 'esim';
-            const CORRECT_PASSWORD = 'seniseviyorum';
-            // -------------------------------------------------------------------------
+        const CORRECT_USERNAME = 'esim'; // Doğru kullanıcı adınız
+        const CORRECT_PASSWORD = 'seniseviyorum'; // Doğru şifreniz
 
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
 
-                const enteredUsername = usernameInput.value.trim();
-                const enteredPassword = passwordInput.value.trim();
+            const enteredUsername = usernameInput.value.trim();
+            const enteredPassword = passwordInput.value.trim();
 
-                if (enteredUsername === CORRECT_USERNAME && enteredPassword === CORRECT_PASSWORD) {
-                    // Başarılı giriş
-                    loginError.classList.add('hidden');
-                    // Oturum açıldığını işaretle
-                    sessionStorage.setItem('isLoggedIn', 'true');
-                    // Kullanıcıyı ana sayfaya yönlendir
-                    window.location.href = 'index.html';
-                } else {
-                    // Hatalı giriş
-                    loginError.textContent = 'Hatalı kullanıcı adı veya şifre. Lütfen tekrar deneyin.';
-                    loginError.classList.remove('hidden');
-                    passwordInput.value = '';
-                    usernameInput.focus();
-                }
-            });
+            if (enteredUsername === CORRECT_USERNAME && enteredPassword === CORRECT_PASSWORD) {
+                // BAŞARILI GİRİŞTE BU SATIR ÇOK ÖNEMLİ!
+                sessionStorage.setItem('isLoggedIn', 'true'); // Kullanıcının giriş yaptığını işaretle
+                window.location.href = 'index.html'; // Ana sayfaya yönlendir
+            } else {
+                loginError.textContent = 'Hatalı kullanıcı adı veya şifre. Lütfen tekrar deneyin.';
+                loginError.classList.remove('hidden');
+                passwordInput.value = '';
+                usernameInput.focus();
+            }
         });
-    </script>
+    });
+</script>
 </body>
 </html>

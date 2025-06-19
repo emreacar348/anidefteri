@@ -21,6 +21,106 @@ if (currentPage === 'index.html' || currentPage === '') { // Ana sayfa veya kök
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const musicToggleButton = document.getElementById('music-toggle-btn');
+    const musicPanel = document.getElementById('music-panel');
+    const playPauseButton = document.getElementById('play-pause-btn');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const volumeSlider = document.getElementById('volume-slider');
+    const backgroundMusic = document.getElementById('background-music');
+    const closeMusicPanelBtn = document.getElementById('close-music-panel-btn'); // Kapat butonu
+
+    // Eğer müzik elementleri varsa çalıştır
+    if (musicToggleButton && musicPanel && playPauseButton && volumeSlider && backgroundMusic) {
+        // Sayfa yüklendiğinde son ses seviyesini ayarla veya varsayılan 0.5 yap
+        const savedVolume = localStorage.getItem('musicVolume');
+        if (savedVolume !== null) {
+            backgroundMusic.volume = parseFloat(savedVolume);
+            volumeSlider.value = parseFloat(savedVolume);
+        } else {
+            backgroundMusic.volume = 0.5; // Varsayılan ses seviyesi
+            volumeSlider.value = 0.5;
+        }
+
+        // Müzik paneli toggle (açma/kapama)
+        musicToggleButton.addEventListener('click', () => {
+            musicPanel.classList.toggle('hidden'); // hidden sınıfını kaldır/ekle
+            if (!musicPanel.classList.contains('hidden')) {
+                // Eğer panel açılırsa, animasyon için ek sınıfları ekle
+                musicPanel.classList.add('translate-y-0', 'opacity-100');
+                musicPanel.classList.remove('translate-y-4', 'opacity-0');
+            } else {
+                // Eğer panel kapanırsa, animasyon için ek sınıfları kaldır
+                musicPanel.classList.add('translate-y-4', 'opacity-0');
+                musicPanel.classList.remove('translate-y-0', 'opacity-100');
+            }
+        });
+
+        // Panel kapat butonu
+        if (closeMusicPanelBtn) {
+            closeMusicPanelBtn.addEventListener('click', () => {
+                musicPanel.classList.add('hidden', 'translate-y-4', 'opacity-0');
+                musicPanel.classList.remove('translate-y-0', 'opacity-100');
+            });
+        }
+
+
+        // Oynat/Duraklat butonu
+        playPauseButton.addEventListener('click', () => {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().then(() => {
+                    playIcon.classList.add('hidden');
+                    pauseIcon.classList.remove('hidden');
+                }).catch(error => {
+                    console.error("Müzik çalma hatası:", error);
+                    // Kullanıcıya bilgi ver (örn: "Müzik otomatik oynatılamadı, lütfen sayfayla etkileşim kurun.")
+                });
+            } else {
+                backgroundMusic.pause();
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            }
+        });
+
+        // Ses seviyesi ayarı
+        volumeSlider.addEventListener('input', () => {
+            backgroundMusic.volume = volumeSlider.value;
+            localStorage.setItem('musicVolume', volumeSlider.value); // Ses seviyesini kaydet
+        });
+
+        // Müzik bittiğinde veya duraklatıldığında ikonları güncelle
+        backgroundMusic.addEventListener('play', () => {
+            playIcon.classList.add('hidden');
+            pauseIcon.classList.remove('hidden');
+        });
+
+        backgroundMusic.addEventListener('pause', () => {
+            playIcon.classList.remove('hidden');
+            pauseIcon.classList.add('hidden');
+        });
+
+        // Tarayıcının autoplay kısıtlamalarını ele almak için
+        // İlk kullanıcı etkileşiminde müziği çalmayı deneme
+        document.body.addEventListener('click', function tryPlayMusicOnce() {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().then(() => {
+                    console.log("Müzik başarıyla çalmaya başladı.");
+                }).catch(error => {
+                    console.warn("Otomatik oynatma engellendi veya hata oluştu:", error);
+                    // Eğer kullanıcı ilk tıklamasıyla bile oynatılmıyorsa,
+                    // muhtemelen tarayıcının medya ayarları çok kısıtlayıcıdır.
+                });
+            }
+            // Müzik bir kere çalmaya başladıktan sonra bu dinleyiciyi kaldır
+            document.body.removeEventListener('click', tryPlayMusicOnce);
+        }, { once: true }); // Sadece bir kere çalışmasını sağla
+
+        // İleri/Geri Sarma butonları (Eğer birden fazla şarkı olacaksa eklenecek)
+        // const prevSongBtn = document.getElementById('prev-song-btn');
+        // const nextSongBtn = document.getElementById('next-song-btn');
+        // Bu butonların mantığı için, bir şarkı listesi ve currentSongIndex gibi bir değişkene ihtiyacımız olur.
+    }
+    
     // ----------------------------
     // Navigasyon Aktif Bağlantı İzleme
     // ----------------------------
