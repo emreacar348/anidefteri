@@ -384,3 +384,112 @@ h2 {
 }
 
 /*! Ses düğmesi stili */
+
+/*? Mobil menü ve Müzik paneli için */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+
+/* Navbar için özel responsive ayarlar */
+#main-nav .container {
+    /* Large ekranlarda space-x-4, küçük ekranlarda justify-between olacak */
+    display: flex;
+    justify-content: space-between; /* Hamburger ve logo/başlık için */
+    align-items: center;
+}
+
+#nav-menu {
+    /* Tailwind sınıfları HTML'de halihazırda var:
+       hidden lg:flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-4
+       absolute lg:relative top-full left-0 w-full lg:w-auto
+       bg-white lg:bg-transparent shadow-lg lg:shadow-none py-4 lg:py-0 px-4 lg:px-0
+    */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Animasyon için */
+    transform: translateY(-10px); /* Açılırken hafif aşağı kayma */
+    opacity: 0;
+    pointer-events: none; /* Gizliyken tıklamaları engelle */
+}
+
+#nav-menu.flex { /* flex sınıfı eklenince görünür olacak */
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto; /* Görünürken tıklamaları etkinleştir */
+}
+
+#nav-menu.active-mobile-menu { /* JavaScript tarafından eklenecek bir sınıf */
+    /* Menü açıldığında uygulanacak ek stil veya animasyonlar */
+}
+
+/* Nav Linkleri mobil görünümde tam genişlikte olsun */
+#nav-menu a.nav-link {
+    display: block; /* Her link kendi satırında */
+    width: 100%; /* Tam genişlik */
+    text-align: center; /* Ortala */
+    padding-left: 1rem; /* px-4 Tailwind'den geliyor */
+    padding-right: 1rem;
+}
+
+/* Müzik paneli animasyonları ve konumlandırma */
+#music-player-container {
+    /* Tailwind sınıfları: fixed bottom-4 right-4 z-50 */
+    /* Mobil görünümde daha iyi konumlandırma */
+    right: 1rem; /* Sağdan biraz boşluk */
+    bottom: 1rem; /* Aşağıdan biraz boşluk */
+}
+
+#music-toggle-btn {
+    /* Tailwind sınıfları: bg-indigo-600 text-white rounded-full p-3 shadow-lg hover:bg-red-500 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 */
+    /* Mobil cihazlarda daha kolay tıklanabilir olması için boyutunu biraz büyütelim */
+    width: 56px; /* h-14 */
+    height: 56px; /* w-14 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#music-toggle-btn svg {
+    width: 28px; /* Daha büyük ikon */
+    height: 28px;
+}
+
+#music-panel {
+    /* Tailwind sınıfları: hidden absolute bottom-full right-0 mb-4 bg-white p-4 rounded-lg shadow-xl w-64 */
+    /* Animasyonlu geçişler için Tailwind'deki transition-all duration-300 ease-out zaten var */
+    transform: translateY(20px); /* Başlangıçta biraz aşağıda */
+    opacity: 0; /* Başlangıçta gizli */
+    pointer-events: none; /* Gizliyken tıklamaları engelle */
+}
+
+#music-panel.translate-y-0 { /* JavaScript ile eklenen sınıf */
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto; /* Görünürken tıklamaları etkinleştir */
+}
+
+/* Mobil cihazlarda panelin genişliğini ayarla */
+@media (max-width: 639px) { /* Tailwind'in 'sm' breakpoint'inden küçük ekranlar için */
+    #music-panel {
+        width: calc(100vw - 2rem); /* Ekran genişliğinden sağ ve sol boşluğu çıkar */
+        left: 1rem; /* Sola hizala */
+        right: 1rem; /* Sağa hizala */
+        margin-right: 0; /* Tailwind'den gelen right-0'ı sıfırla */
+        transform: translateY(20px); /* Kapanma pozisyonu */
+        bottom: 5rem; /* Butonun üstünde olsun */
+    }
+
+    #music-panel.translate-y-0 {
+        transform: translateY(0);
+    }
+}
+
+/*? Mobil menü ve Müzik paneli için */

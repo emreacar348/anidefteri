@@ -20,111 +20,13 @@ if (currentPage === 'index.html' || currentPage === '') { // Ana sayfa veya kök
     }
 }
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
-    const musicToggleButton = document.getElementById('music-toggle-btn');
-    const musicPanel = document.getElementById('music-panel');
-    const playPauseButton = document.getElementById('play-pause-btn');
-    const playIcon = document.getElementById('play-icon');
-    const pauseIcon = document.getElementById('pause-icon');
-    const volumeSlider = document.getElementById('volume-slider');
-    const backgroundMusic = document.getElementById('background-music');
-    const closeMusicPanelBtn = document.getElementById('close-music-panel-btn'); // Kapat butonu
-
-    // Eğer müzik elementleri varsa çalıştır
-    if (musicToggleButton && musicPanel && playPauseButton && volumeSlider && backgroundMusic) {
-        // Sayfa yüklendiğinde son ses seviyesini ayarla veya varsayılan 0.5 yap
-        const savedVolume = localStorage.getItem('musicVolume');
-        if (savedVolume !== null) {
-            backgroundMusic.volume = parseFloat(savedVolume);
-            volumeSlider.value = parseFloat(savedVolume);
-        } else {
-            backgroundMusic.volume = 0.5; // Varsayılan ses seviyesi
-            volumeSlider.value = 0.5;
-        }
-
-        // Müzik paneli toggle (açma/kapama)
-        musicToggleButton.addEventListener('click', () => {
-            musicPanel.classList.toggle('hidden'); // hidden sınıfını kaldır/ekle
-            if (!musicPanel.classList.contains('hidden')) {
-                // Eğer panel açılırsa, animasyon için ek sınıfları ekle
-                musicPanel.classList.add('translate-y-0', 'opacity-100');
-                musicPanel.classList.remove('translate-y-4', 'opacity-0');
-            } else {
-                // Eğer panel kapanırsa, animasyon için ek sınıfları kaldır
-                musicPanel.classList.add('translate-y-4', 'opacity-0');
-                musicPanel.classList.remove('translate-y-0', 'opacity-100');
-            }
-        });
-
-        // Panel kapat butonu
-        if (closeMusicPanelBtn) {
-            closeMusicPanelBtn.addEventListener('click', () => {
-                musicPanel.classList.add('hidden', 'translate-y-4', 'opacity-0');
-                musicPanel.classList.remove('translate-y-0', 'opacity-100');
-            });
-        }
-
-
-        // Oynat/Duraklat butonu
-        playPauseButton.addEventListener('click', () => {
-            if (backgroundMusic.paused) {
-                backgroundMusic.play().then(() => {
-                    playIcon.classList.add('hidden');
-                    pauseIcon.classList.remove('hidden');
-                }).catch(error => {
-                    console.error("Müzik çalma hatası:", error);
-                    // Kullanıcıya bilgi ver (örn: "Müzik otomatik oynatılamadı, lütfen sayfayla etkileşim kurun.")
-                });
-            } else {
-                backgroundMusic.pause();
-                playIcon.classList.remove('hidden');
-                pauseIcon.classList.add('hidden');
-            }
-        });
-
-        // Ses seviyesi ayarı
-        volumeSlider.addEventListener('input', () => {
-            backgroundMusic.volume = volumeSlider.value;
-            localStorage.setItem('musicVolume', volumeSlider.value); // Ses seviyesini kaydet
-        });
-
-        // Müzik bittiğinde veya duraklatıldığında ikonları güncelle
-        backgroundMusic.addEventListener('play', () => {
-            playIcon.classList.add('hidden');
-            pauseIcon.classList.remove('hidden');
-        });
-
-        backgroundMusic.addEventListener('pause', () => {
-            playIcon.classList.remove('hidden');
-            pauseIcon.classList.add('hidden');
-        });
-
-        // Tarayıcının autoplay kısıtlamalarını ele almak için
-        // İlk kullanıcı etkileşiminde müziği çalmayı deneme
-        document.body.addEventListener('click', function tryPlayMusicOnce() {
-            if (backgroundMusic.paused) {
-                backgroundMusic.play().then(() => {
-                    console.log("Müzik başarıyla çalmaya başladı.");
-                }).catch(error => {
-                    console.warn("Otomatik oynatma engellendi veya hata oluştu:", error);
-                    // Eğer kullanıcı ilk tıklamasıyla bile oynatılmıyorsa,
-                    // muhtemelen tarayıcının medya ayarları çok kısıtlayıcıdır.
-                });
-            }
-            // Müzik bir kere çalmaya başladıktan sonra bu dinleyiciyi kaldır
-            document.body.removeEventListener('click', tryPlayMusicOnce);
-        }, { once: true }); // Sadece bir kere çalışmasını sağla
-
-        // İleri/Geri Sarma butonları (Eğer birden fazla şarkı olacaksa eklenecek)
-        // const prevSongBtn = document.getElementById('prev-song-btn');
-        // const nextSongBtn = document.getElementById('next-song-btn');
-        // Bu butonların mantığı için, bir şarkı listesi ve currentSongIndex gibi bir değişkene ihtiyacımız olur.
-    }
-    
     // ----------------------------
-    // Navigasyon Aktif Bağlantı İzleme
+    // Navigasyon Aktif Bağlantı İzleme (Mevcut kodunuz)
     // ----------------------------
-    const navLinks = document.querySelectorAll('#main-nav a');
+    const navLinks = document.querySelectorAll('#nav-menu a'); // Seçiciyi güncelledik
     const sections = document.querySelectorAll('main section');
 
     const observer = new IntersectionObserver(entries => {
@@ -141,6 +43,143 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { rootMargin: '-50% 0px -50% 0px' });
 
     sections.forEach(section => observer.observe(section));
+
+    //! Müzik Paneli ve Müzik Kontrolleri
+
+
+    // ----------------------------
+    // Hamburger Menü Logic (YENİ EKLENİYOR)
+    // ----------------------------
+    const menuToggleButton = document.getElementById('menu-toggle-btn');
+    const navMenu = document.getElementById('nav-menu');
+
+    if (menuToggleButton && navMenu) {
+        menuToggleButton.addEventListener('click', () => {
+            navMenu.classList.toggle('hidden'); // hidden sınıfını ekleyip kaldır
+            navMenu.classList.toggle('flex'); // flex sınıfını ekleyip kaldır
+            navMenu.classList.toggle('active-mobile-menu'); // Animasyon için kullanacağımız sınıf
+        });
+
+        // Menü açıkken dışarıya tıklayınca kapatma
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !menuToggleButton.contains(e.target) && !navMenu.classList.contains('hidden')) {
+                navMenu.classList.add('hidden');
+                navMenu.classList.remove('flex', 'active-mobile-menu');
+            }
+        });
+
+        // Menüdeki bir linke tıklayınca menüyü kapatma
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (!navMenu.classList.contains('hidden')) { // Eğer menü açıksa kapat
+                    navMenu.classList.add('hidden');
+                    navMenu.classList.remove('flex', 'active-mobile-menu');
+                }
+            });
+        });
+    }
+
+    // ----------------------------
+    // Geri Sayım Sayaç Logic (Mevcut kodunuz)
+    // ----------------------------
+    function startCountdown() {
+        // ... (mevcut kodunuz) ...
+    }
+    if (document.getElementById('countdown-timer')) {
+        startCountdown();
+    }
+
+    // ----------------------------
+    // Etkinlik Çarkı Logic (Mevcut kodunuz)
+    // ----------------------------
+    // ... (mevcut kodunuz) ...
+
+    // ----------------------------
+    // Müzik Kontrol Mekaniği (Mevcut kodunuz)
+    // ----------------------------
+    const musicToggleButton = document.getElementById('music-toggle-btn'); // Global olmalıydı ama burada tekrar tanımlayabiliriz
+    const musicPanel = document.getElementById('music-panel');
+    const playPauseButton = document.getElementById('play-pause-btn');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const volumeSlider = document.getElementById('volume-slider');
+    const backgroundMusic = document.getElementById('background-music');
+    const closeMusicPanelBtn = document.getElementById('close-music-panel-btn');
+
+    if (musicToggleButton && musicPanel && playPauseButton && volumeSlider && backgroundMusic) {
+        const savedVolume = localStorage.getItem('musicVolume');
+        if (savedVolume !== null) {
+            backgroundMusic.volume = parseFloat(savedVolume);
+            volumeSlider.value = parseFloat(savedVolume);
+        } else {
+            backgroundMusic.volume = 0.5;
+            volumeSlider.value = 0.5;
+        }
+
+        musicToggleButton.addEventListener('click', () => {
+            // Müzik panelini aç/kapat
+            if (musicPanel.classList.contains('hidden')) {
+                musicPanel.classList.remove('hidden', 'translate-y-4', 'opacity-0');
+                musicPanel.classList.add('translate-y-0', 'opacity-100');
+            } else {
+                musicPanel.classList.add('translate-y-4', 'opacity-0');
+                musicPanel.classList.remove('translate-y-0', 'opacity-100');
+                setTimeout(() => musicPanel.classList.add('hidden'), 300); // Animasyon bitince gizle
+            }
+        });
+
+        if (closeMusicPanelBtn) {
+            closeMusicPanelBtn.addEventListener('click', () => {
+                musicPanel.classList.add('translate-y-4', 'opacity-0');
+                musicPanel.classList.remove('translate-y-0', 'opacity-100');
+                setTimeout(() => musicPanel.classList.add('hidden'), 300);
+            });
+        }
+
+        playPauseButton.addEventListener('click', () => {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().then(() => {
+                    playIcon.classList.add('hidden');
+                    pauseIcon.classList.remove('hidden');
+                }).catch(error => {
+                    console.error("Müzik çalma hatası:", error);
+                });
+            } else {
+                backgroundMusic.pause();
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            }
+        });
+
+        volumeSlider.addEventListener('input', () => {
+            backgroundMusic.volume = volumeSlider.value;
+            localStorage.setItem('musicVolume', volumeSlider.value);
+        });
+
+        backgroundMusic.addEventListener('play', () => {
+            playIcon.classList.add('hidden');
+            pauseIcon.classList.remove('hidden');
+        });
+
+        backgroundMusic.addEventListener('pause', () => {
+            playIcon.classList.remove('hidden');
+            pauseIcon.classList.add('hidden');
+        });
+
+        document.body.addEventListener('click', function tryPlayMusicOnce() {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().then(() => {
+                    console.log("Müzik başarıyla çalmaya başladı.");
+                }).catch(error => {
+                    console.warn("Otomatik oynatma engellendi veya hata oluştu:", error);
+                });
+            }
+            document.body.removeEventListener('click', tryPlayMusicOnce);
+        }, { once: true });
+    }
+    //!Müzik Kontrol Mekaniği bitiş
+
+
 
     // ----------------------------
     // Geri Sayım Sayaç Logic
