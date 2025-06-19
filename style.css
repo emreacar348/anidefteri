@@ -1,15 +1,16 @@
 /* CSS Stilleri */
 :root {
-    --primary: #4f46e5;
-    --accent: #ef4444; /* Kırmızı tonunu güncelledim, Tailwind red-500 ile uyumlu olması için */
-    --background: #F9FAFB;
-    --text: #1F2937;
+  --primary: #4f46e5;
+  --accent: #ef4444;
+  /* Kırmızı tonunu güncelledim, Tailwind red-500 ile uyumlu olması için */
+  --background: #F9FAFB;
+  --text: #1F2937;
 }
 
 body {
-    background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%);
-    /* font-family: 'Inter', sans-serif; - Tailwind font-sans zaten varsayılanı yönetiyor */
-    /* color ve background-color da body için genel olarak Tailwind tarafından yönetilebilir veya root değişkenlerinden gelebilir. */
+  background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%);
+  /* font-family: 'Inter', sans-serif; - Tailwind font-sans zaten varsayılanı yönetiyor */
+  /* color ve background-color da body için genel olarak Tailwind tarafından yönetilebilir veya root değişkenlerinden gelebilir. */
 }
 
 /* Ekran okuyucular için gizli metinler */
@@ -27,159 +28,165 @@ body {
 
 
 .nav-link.active {
-    background-color: var(--primary);
-    color: white;
-    font-weight: 600;
+  background-color: var(--primary);
+  color: white;
+  font-weight: 600;
 }
 
 .chart-container {
-    position: relative;
-    height: 320px;
-    width: 100%;
-    max-width: 320px;
-    margin-left: auto;
-    margin-right: auto;
+  position: relative;
+  height: 320px;
+  width: 100%;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (min-width: 768px) {
-    .chart-container {
-        height: 350px;
-        max-width: 350px;
-    }
+  .chart-container {
+    height: 350px;
+    max-width: 350px;
+  }
 }
 
 #main-nav {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background-color: var(--background);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: var(--background);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .wheel-container {
-    position: relative;
-    height: 300px;
-    width: 100%;
-    max-width: 300px;
-    margin-left: auto;
-    margin-right: auto;
-    overflow: hidden;
+  position: relative;
+  height: 300px;
+  width: 100%;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
 }
 
 .wheel-container canvas {
-    display: block;
+  display: block;
 }
 
 .pointer {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-top: 30px solid var(--accent); /* Pointer rengini accent ile eşitledim */
-    z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 30px solid var(--accent);
+  /* Pointer rengini accent ile eşitledim */
+  z-index: 10;
 }
 
 /* Modal Stilleri */
 .modal {
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
 .modal.show {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
 .modal-content {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-    border-radius: 0.5rem;
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  border-radius: 0.5rem;
 }
 
 .close-button {
-    position: absolute;
-    top: 20px;
-    right: 35px;
-    color: #fff;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.2s;
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
 .close-button:hover,
 .close-button:focus {
-    color: #ccc;
-    text-decoration: none;
-    cursor: pointer;
+  color: #ccc;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-button, .nav-link {
-    transition: background-color 0.3s ease, transform 0.2s ease;
+button,
+.nav-link {
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
-button:hover, .nav-link:hover {
-    background-color: var(--accent);
-    transform: scale(1.05);
+
+button:hover,
+.nav-link:hover {
+  background-color: var(--accent);
+  transform: scale(1.05);
 }
 
 .activity-icon {
-    width: 40px;
-    height: 40px;
-    fill: var(--primary);
+  width: 40px;
+  height: 40px;
+  fill: var(--primary);
 }
 
 /*? İMG STİLLERİ */
 
-img, .card {
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+img,
+.card {
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /*! H ETİKET GÜNCELLEMELERİ BAŞLANGIÇ !*/
 
 h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    line-height: 1.2;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 h2 {
-    font-size: 1.75rem;
-    font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: 600;
 }
 
 p {
-    font-size: 1rem;
-    line-height: 1.6;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
 
 h2 {
-    font-family: 'Caveat', cursive;
-    font-size: 2rem;
-    color: var(--primary); /* Direkt hex kod yerine değişken kullanıldı */
+  font-family: 'Caveat', cursive;
+  font-size: 2rem;
+  color: var(--primary);
+  /* Direkt hex kod yerine değişken kullanıldı */
 }
 
 h1,
 h2 {
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /*! H ETİKET GÜNCELLEMELERİ BİTİŞ !*/
@@ -188,31 +195,39 @@ h2 {
 /* Instagram Tarzı Galeri Stilleri */
 #gallery-grid {
   display: grid;
-  gap: 1rem; /* Grid öğeleri arasındaki boşluk */
+  gap: 1rem;
+  /* Grid öğeleri arasındaki boşluk */
 }
 
 .gallery-item {
-  aspect-ratio: 1/1; /* Kare görünüm için */
+  aspect-ratio: 1/1;
+  /* Kare görünüm için */
   overflow: hidden;
-  border-radius: 0.5rem; /* Hafif yuvarlatılmış köşeler */
+  border-radius: 0.5rem;
+  /* Hafif yuvarlatılmış köşeler */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative; /* Alt yazı için */
+  position: relative;
+  /* Alt yazı için */
 }
 
 .gallery-item img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Resmi kareye sığdırır, kırpma yapar */
+  object-fit: cover;
+  /* Resmi kareye sığdırır, kırpma yapar */
   transition: transform 0.3s ease;
 }
 
 .gallery-item:hover {
-  transform: scale(1.05); /* Hover'da hafif büyüme */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Hafif gölge */
+  transform: scale(1.05);
+  /* Hover'da hafif büyüme */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  /* Hafif gölge */
 }
 
 .gallery-item:hover .bg-black {
-  opacity: 1; /* Hover'da alt yazıyı göster */
+  opacity: 1;
+  /* Hover'da alt yazıyı göster */
 }
 
 .gallery-item .bg-black {
@@ -256,15 +271,16 @@ h2 {
   gap: 1rem;
 }
 
-#countdown-timer > div {
+#countdown-timer>div {
   background-color: var(--background);
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 
-#countdown-timer > div:hover {
-  transform: scale(1.05); /* Hafif büyüme efekti */
+#countdown-timer>div:hover {
+  transform: scale(1.05);
+  /* Hafif büyüme efekti */
 }
 
 #countdown-timer span {
@@ -286,18 +302,19 @@ h2 {
 
 /* Yeni eklenen animasyon */
 @keyframes fadeInUpx {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in-up {
-    animation: fadeInUpx 0.5s ease-out forwards;
+  animation: fadeInUpx 0.5s ease-out forwards;
 }
 
 /*! Ses Düğmesi Stilleri */
@@ -305,58 +322,65 @@ h2 {
 /* style.css dosyasının sonuna eklenebilir */
 
 /* Müzik çalar konteyneri */
-#music-player-container {
-    /* fixed, bottom-4, right-4, z-50, vb. zaten Tailwind ile HTML'de verilmiş */
-}
 
-/* Müzik paneli varsayılan gizli ve animasyon için başlangıç durumu */
 #music-panel {
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Animasyon geçişleri */
-    transform: translateY(20px); /* Başlangıçta hafifçe aşağıda */
-    opacity: 0; /* Başlangıçta görünmez */
-    visibility: hidden; /* Click olaylarını engellemek için */
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  /* Animasyon geçişleri */
+  transform: translateY(20px);
+  /* Başlangıçta hafifçe aşağıda */
+  opacity: 0;
+  /* Başlangıçta görünmez */
+  visibility: hidden;
+  /* Click olaylarını engellemek için */
 }
 
 /* Panel gösterildiğinde */
-#music-panel:not(.hidden) { /* .hidden sınıfı yoksa göster */
-    transform: translateY(0); /* Normal konum */
-    opacity: 1; /* Tamamen görünür */
-    visibility: visible; /* Click olaylarını etkinleştir */
+#music-panel:not(.hidden) {
+  /* .hidden sınıfı yoksa göster */
+  transform: translateY(0);
+  /* Normal konum */
+  opacity: 1;
+  /* Tamamen görünür */
+  visibility: visible;
+  /* Click olaylarını etkinleştir */
 }
 
 /* Ses sürgüsü stili (isteğe bağlı, tarayıcı varsayılanından daha şık) */
 #volume-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--primary); /* Temel renk */
-    cursor: pointer;
-    box-shadow: 0 0 0 2px rgba(var(--primary), 0.3);
-    transition: background 0.3s ease;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary);
+  /* Temel renk */
+  cursor: pointer;
+  box-shadow: 0 0 0 2px rgba(var(--primary), 0.3);
+  transition: background 0.3s ease;
 }
 
 #volume-slider::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--primary);
-    cursor: pointer;
-    box-shadow: 0 0 0 2px rgba(var(--primary), 0.3);
-    transition: background 0.3s ease;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  box-shadow: 0 0 0 2px rgba(var(--primary), 0.3);
+  transition: background 0.3s ease;
 }
 
 #volume-slider::-webkit-slider-runnable-track {
-    background: #e2e8f0; /* gray-200 */
-    border-radius: 4px;
-    height: 4px;
+  background: #e2e8f0;
+  /* gray-200 */
+  border-radius: 4px;
+  height: 4px;
 }
 
 #volume-slider::-moz-range-track {
-    background: #e2e8f0; /* gray-200 */
-    border-radius: 4px;
-    height: 4px;
+  background: #e2e8f0;
+  /* gray-200 */
+  border-radius: 4px;
+  height: 4px;
 }
 
 /*! Ses düğmesi stili */
