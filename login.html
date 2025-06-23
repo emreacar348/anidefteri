@@ -247,7 +247,7 @@
                 if (userAnswer === CORRECT_ANSWER) {
                     loginContainer.innerHTML = `<h1 class="text-center text-3xl font-bold text-green-600 animate-pulse">Erişim İzni Verildi!</h1><p class="text-center mt-4">Bizim Dünyamız'a hoş geldin...</p>`;
                     setTimeout(() => {
-                        sessionStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('isLoggedIn', 'true');
                         window.location.href = 'index.html';
                     }, 1500);
                 } else {
