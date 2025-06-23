@@ -8,11 +8,13 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Lato:wght@300;400&display=swap"
+        rel="stylesheet">
 
     <style>
         :root {
-            --primary: #4a0e60; 
+            --primary: #4a0e60;
             --accent: #a37eba;
         }
 
@@ -22,21 +24,34 @@
         }
 
         #background-video {
-            position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
-            width: auto; height: auto; z-index: -2;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -2;
             transform: translateX(-50%) translateY(-50%);
             object-fit: cover;
         }
-        
+
         .video-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-color: rgba(15, 12, 41, 0.6);
             z-index: -1;
         }
 
         #splash-screen {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-color: rgba(15, 12, 41, 1);
             z-index: 100;
             display: flex;
@@ -46,6 +61,7 @@
             color: white;
             transition: opacity 0.8s ease-out;
         }
+
         .splash-button {
             border: 1px solid var(--accent);
             padding: 0.75rem 2rem;
@@ -56,20 +72,28 @@
             cursor: pointer;
             transition: all 0.3s;
         }
+
         .splash-button:hover {
             background-color: var(--accent);
             color: var(--primary);
         }
 
-        .login-wrapper { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
         .login-container {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            padding: 2.5rem; border-radius: 1rem;
+            padding: 2.5rem;
+            border-radius: 1rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            width: 100%; max-width: 480px;
+            width: 100%;
+            max-width: 480px;
             border: 1px solid rgba(255, 255, 255, 0.15);
             color: white;
         }
@@ -87,6 +111,7 @@
             display: inline-block;
             animation: fadeInChar 0.5s forwards;
         }
+
         @keyframes fadeInChar {
             to {
                 opacity: 1;
@@ -94,17 +119,99 @@
             }
         }
 
-        .cipher-box { background-color: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.4); padding: 1.5rem; border-radius: 0.5rem; text-align: center; margin-bottom: 1.5rem; }
-        .cipher-text { font-family: 'Courier New', Courier, monospace; font-size: 1.75rem; letter-spacing: 0.2em; color: white; font-weight: bold; }
-        .key-clue { color: #e2e8f0; font-family: 'Lato', sans-serif; font-style: italic; font-weight: 300; margin-top: 0.75rem;}
-        .form-input { background-color: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); color: white; padding: 0.75rem 1rem; border-radius: 0.5rem; width: 100%; font-size: 0.75rem;}
-        .form-input::placeholder { color: #cbd5e1; }
-        .form-button { background-color: var(--accent); color: var(--primary); padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; width: 100%; transition: all 0.3s;}
-        .form-button:hover { background-color: white; color: var(--primary); }
-        label { color: #e2e8f0; font-family: 'Lato', sans-serif; }
-        .error-message { color: #fecaca; background-color: rgba(185, 28, 28, 0.5); padding: 0.5rem; border-radius: 0.5rem; }
-        @keyframes shake { 10%, 90% { transform: translateX(-1px); } 20%, 80% { transform: translateX(2px); } 30%, 50%, 70% { transform: translateX(-4px); } 40%, 60% { transform: translateX(4px); } }
-        .shake { animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both; }
+        .cipher-box {
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px dashed rgba(255, 255, 255, 0.4);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .cipher-text {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.75rem;
+            letter-spacing: 0.2em;
+            color: white;
+            font-weight: bold;
+        }
+
+        .key-clue {
+            color: #e2e8f0;
+            font-family: 'Lato', sans-serif;
+            font-style: italic;
+            font-weight: 300;
+            margin-top: 0.75rem;
+        }
+
+        .form-input {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            font-size: 0.75rem;
+        }
+
+        .form-input::placeholder {
+            color: #cbd5e1;
+        }
+
+        .form-button {
+            background-color: var(--accent);
+            color: var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .form-button:hover {
+            background-color: white;
+            color: var(--primary);
+        }
+
+        label {
+            color: #e2e8f0;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .error-message {
+            color: #fecaca;
+            background-color: rgba(185, 28, 28, 0.5);
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translateX(-1px);
+            }
+
+            20%,
+            80% {
+                transform: translateX(2px);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translateX(-4px);
+            }
+
+            40%,
+            60% {
+                transform: translateX(4px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.6s cubic-bezier(.36, .07, .19, .97) both;
+        }
 
 
         #sound-control-button {
@@ -128,17 +235,20 @@
             transform: scale(0.8);
             pointer-events: none;
         }
+
         #sound-control-button.visible {
             opacity: 1;
             transform: scale(1);
             pointer-events: auto;
         }
+
         #sound-control-button:hover {
             background-color: rgba(255, 255, 255, 0.3);
             transform: scale(1.1);
         }
     </style>
 </head>
+
 <body>
 
     <video id="background-video" src="videos/bitanem.mp4" loop muted playsinline></video>
@@ -154,21 +264,33 @@
     </div>
 
     <div id="sound-control-button" aria-label="Sesi aç/kapat">
-        <svg id="icon-muted" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" /></svg>
-        <svg id="icon-unmuted" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+        <svg id="icon-muted" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                clip-rule="evenodd" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+        </svg>
+        <svg id="icon-unmuted" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+        </svg>
     </div>
 
     <div class="login-wrapper">
         <div id="loginContainer" class="login-container">
             <h1 id="main-title" class="text-center text-5xl font-bold mb-4">Aşkın Kriptosu</h1>
             <div class="cipher-box">
-                <p class="cipher-text">PİGAXWU</p>
+                <p class="cipher-text">ÖİGAXXU</p>
                 <p class="key-clue">Anahtar:HER ŞEYİN BAŞLADIĞI TARİH RAKAMLARI TOPLAMI</p>
             </div>
             <form id="puzzleForm" class="space-y-6">
                 <div>
                     <label for="puzzleAnswer" class="block text-sm font-medium mb-2">❤️ Çözülmüş Parola:</label>
-                    <input type="text" id="puzzleAnswer" name="puzzleAnswer" class="form-input" placeholder="Şifreyi küçük harflerle buraya çöz bitanem..." required>
+                    <input type="text" id="puzzleAnswer" name="puzzleAnswer" class="form-input"
+                        placeholder="Şifreyi küçük harflerle buraya çöz bitanem..." required>
                 </div>
                 <p id="puzzleError" class="error-message hidden" role="alert"></p>
                 <button type="submit" class="form-button">Sisteme Eriş</button>
@@ -243,11 +365,11 @@
                 errorDisplay.classList.add('hidden');
                 loginContainer.classList.remove('shake');
                 const userAnswer = answerInput.value.trim().toLowerCase().replace(/\s/g, '');
-                
+
                 if (userAnswer === CORRECT_ANSWER) {
                     loginContainer.innerHTML = `<h1 class="text-center text-3xl font-bold text-green-600 animate-pulse">Erişim İzni Verildi!</h1><p class="text-center mt-4">Bizim Dünyamız'a hoş geldin...</p>`;
                     setTimeout(() => {
-                        sessionStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('isLoggedIn', 'true');
                         window.location.href = 'index.html';
                     }, 1500);
                 } else {
@@ -260,4 +382,5 @@
         });
     </script>
 </body>
+
 </html>
