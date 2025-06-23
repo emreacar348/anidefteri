@@ -94,9 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // Eğer hiç kaydedilmiş görev yoksa başlangıçtaki örnek görevleri ekle
             const initialTodos = [
-                'Deniz kenarında piknik yapmak',
-                'Yeni bir dil öğrenmeye başlamak',
-                'Beraber bir film maratonu yapmak'
+                
             ];
             todoList.innerHTML = ''; // HTML'deki mevcut listeyi temizle
             initialTodos.forEach(todoText => {
