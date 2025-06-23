@@ -12,7 +12,7 @@
 const currentPage = window.location.pathname.split('/').pop(); // Sadece dosya adını al
 
 if (currentPage === 'index.html' || currentPage === '') { // Ana sayfa veya kök dizin ise
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn'); // Oturum durumunu kontrol et
+    const isLoggedIn = localStorage.getItem('isLoggedIn'); // Oturum durumunu kontrol et
 
     // Eğer kullanıcı giriş yapmamışsa, login sayfasına yönlendir
     if (!isLoggedIn) {
@@ -20,177 +20,109 @@ if (currentPage === 'index.html' || currentPage === '') { // Ana sayfa veya kök
     }
 }
 
-
-
+// Tüm DOM ile ilgili işlemler DOMContentLoaded içinde olmalı
 document.addEventListener('DOMContentLoaded', () => {
-    // ----------------------------
-    // Navigasyon Aktif Bağlantı İzleme (Mevcut kodunuz)
-    // ----------------------------
-    const navLinks = document.querySelectorAll('#nav-menu a'); // Seçiciyi güncelledik
-    const sections = document.querySelectorAll('main section');
 
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').substring(1) === entry.target.id) {
-                        link.classList.add('active');
-                    }
-                });
+    // ----------------------------
+    // Yapılacaklar Listesi Logic
+    // ----------------------------
+    const todoInput = document.getElementById('todoInput');
+    const addTodoBtn = document.getElementById('addTodoBtn');
+    const todoList = document.getElementById('todoList');
+
+    // Helper fonksiyon: Yapılacaklar listesini localStorage'a kaydet
+    function saveTodos() {
+        const todos = [];
+        todoList.querySelectorAll('li span').forEach(span => {
+            todos.push(span.textContent); // Her bir görev metnini al
+        });
+        localStorage.setItem('todos', JSON.stringify(todos)); // Diziyi JSON string'ine çevirerek kaydet
+    }
+
+    function createTodoItem(text) {
+        const listItem = document.createElement('li');
+        listItem.className = 'bg-slate-50 p-4 rounded-lg shadow-sm flex items-center justify-between';
+        listItem.innerHTML = `
+            <span class="text-lg text-slate-700">${text}</span>
+            <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2" aria-label="Görevi sil">X</button>
+        `;
+        return listItem;
+    }
+
+    function addTodoItem() {
+        const todoText = todoInput.value.trim();
+        if (todoText !== '') {
+            const newItem = createTodoItem(todoText);
+            todoList.appendChild(newItem);
+            todoInput.value = '';
+            todoInput.focus();
+            saveTodos(); // Yeni görev eklendiğinde kaydet
+        }
+    }
+
+    if (addTodoBtn) {
+        addTodoBtn.addEventListener('click', addTodoItem);
+    }
+
+    if (todoInput) {
+        todoInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addTodoItem();
             }
         });
-    }, { rootMargin: '-50% 0px -50% 0px' });
+    }
 
-    sections.forEach(section => observer.observe(section));
-
-    //! Müzik Paneli ve Müzik Kontrolleri
-
-
-    // ----------------------------
-    // Hamburger Menü Logic (YENİ EKLENİYOR)
-    // ----------------------------
-    const menuToggleButton = document.getElementById('menu-toggle-btn');
-    const navMenu = document.getElementById('nav-menu');
-
-    if (menuToggleButton && navMenu) {
-        menuToggleButton.addEventListener('click', () => {
-            navMenu.classList.toggle('hidden'); // hidden sınıfını ekleyip kaldır
-            navMenu.classList.toggle('flex'); // flex sınıfını ekleyip kaldır
-            navMenu.classList.toggle('active-mobile-menu'); // Animasyon için kullanacağımız sınıf
-        });
-
-        // Menü açıkken dışarıya tıklayınca kapatma
-        document.addEventListener('click', (e) => {
-            if (!navMenu.contains(e.target) && !menuToggleButton.contains(e.target) && !navMenu.classList.contains('hidden')) {
-                navMenu.classList.add('hidden');
-                navMenu.classList.remove('flex', 'active-mobile-menu');
+    if (todoList) {
+        todoList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('delete-todo-btn')) {
+                e.target.closest('li').remove();
+                saveTodos(); // Görev silindiğinde kaydet
             }
         });
+    }
 
-        // Menüdeki bir linke tıklayınca menüyü kapatma
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (!navMenu.classList.contains('hidden')) { // Eğer menü açıksa kapat
-                    navMenu.classList.add('hidden');
-                    navMenu.classList.remove('flex', 'active-mobile-menu');
-                }
+    // Yapılacaklar Listesini localStorage'dan Yükleme (Sayfa Yüklendiğinde)
+    function loadTodos() {
+        const savedTodos = localStorage.getItem('todos');
+        if (savedTodos) {
+            const todos = JSON.parse(savedTodos);
+            todoList.innerHTML = ''; // HTML'deki mevcut listeyi temizle
+            todos.forEach(todoText => {
+                const newItem = createTodoItem(todoText);
+                todoList.appendChild(newItem);
             });
-        });
-    }
-
-    // ----------------------------
-    // Geri Sayım Sayaç Logic (Mevcut kodunuz)
-    // ----------------------------
-    function startCountdown() {
-        // ... (mevcut kodunuz) ...
-    }
-    if (document.getElementById('countdown-timer')) {
-        startCountdown();
-    }
-
-    // ----------------------------
-    // Etkinlik Çarkı Logic (Mevcut kodunuz)
-    // ----------------------------
-    // ... (mevcut kodunuz) ...
-
-    // ----------------------------
-    // Müzik Kontrol Mekaniği (Mevcut kodunuz)
-    // ----------------------------
-    const musicToggleButton = document.getElementById('music-toggle-btn'); // Global olmalıydı ama burada tekrar tanımlayabiliriz
-    const musicPanel = document.getElementById('music-panel');
-    const playPauseButton = document.getElementById('play-pause-btn');
-    const playIcon = document.getElementById('play-icon');
-    const pauseIcon = document.getElementById('pause-icon');
-    const volumeSlider = document.getElementById('volume-slider');
-    const backgroundMusic = document.getElementById('background-music');
-    const closeMusicPanelBtn = document.getElementById('close-music-panel-btn');
-
-    if (musicToggleButton && musicPanel && playPauseButton && volumeSlider && backgroundMusic) {
-        const savedVolume = localStorage.getItem('musicVolume');
-        if (savedVolume !== null) {
-            backgroundMusic.volume = parseFloat(savedVolume);
-            volumeSlider.value = parseFloat(savedVolume);
         } else {
-            backgroundMusic.volume = 0.5;
-            volumeSlider.value = 0.5;
-        }
-
-        musicToggleButton.addEventListener('click', () => {
-            // Müzik panelini aç/kapat
-            if (musicPanel.classList.contains('hidden')) {
-                musicPanel.classList.remove('hidden', 'translate-y-4', 'opacity-0');
-                musicPanel.classList.add('translate-y-0', 'opacity-100');
-            } else {
-                musicPanel.classList.add('translate-y-4', 'opacity-0');
-                musicPanel.classList.remove('translate-y-0', 'opacity-100');
-                setTimeout(() => musicPanel.classList.add('hidden'), 300); // Animasyon bitince gizle
-            }
-        });
-
-        if (closeMusicPanelBtn) {
-            closeMusicPanelBtn.addEventListener('click', () => {
-                musicPanel.classList.add('translate-y-4', 'opacity-0');
-                musicPanel.classList.remove('translate-y-0', 'opacity-100');
-                setTimeout(() => musicPanel.classList.add('hidden'), 300);
+            // Eğer hiç kaydedilmiş görev yoksa başlangıçtaki örnek görevleri ekle
+            const initialTodos = [
+                'Deniz kenarında piknik yapmak',
+                'Yeni bir dil öğrenmeye başlamak',
+                'Beraber bir film maratonu yapmak'
+            ];
+            todoList.innerHTML = ''; // HTML'deki mevcut listeyi temizle
+            initialTodos.forEach(todoText => {
+                const newItem = createTodoItem(todoText);
+                todoList.appendChild(newItem);
             });
+            saveTodos(); // Başlangıçtaki görevleri de kaydet
         }
-
-        playPauseButton.addEventListener('click', () => {
-            if (backgroundMusic.paused) {
-                backgroundMusic.play().then(() => {
-                    playIcon.classList.add('hidden');
-                    pauseIcon.classList.remove('hidden');
-                }).catch(error => {
-                    console.error("Müzik çalma hatası:", error);
-                });
-            } else {
-                backgroundMusic.pause();
-                playIcon.classList.remove('hidden');
-                pauseIcon.classList.add('hidden');
-            }
-        });
-
-        volumeSlider.addEventListener('input', () => {
-            backgroundMusic.volume = volumeSlider.value;
-            localStorage.setItem('musicVolume', volumeSlider.value);
-        });
-
-        backgroundMusic.addEventListener('play', () => {
-            playIcon.classList.add('hidden');
-            pauseIcon.classList.remove('hidden');
-        });
-
-        backgroundMusic.addEventListener('pause', () => {
-            playIcon.classList.remove('hidden');
-            pauseIcon.classList.add('hidden');
-        });
-
-        document.body.addEventListener('click', function tryPlayMusicOnce() {
-            if (backgroundMusic.paused) {
-                backgroundMusic.play().then(() => {
-                    console.log("Müzik başarıyla çalmaya başladı.");
-                }).catch(error => {
-                    console.warn("Otomatik oynatma engellendi veya hata oluştu:", error);
-                });
-            }
-            document.body.removeEventListener('click', tryPlayMusicOnce);
-        }, { once: true });
     }
-    //!Müzik Kontrol Mekaniği bitiş
 
+    // Sayfa yüklendiğinde görevleri yükle
+    if (todoList) {
+        loadTodos();
+    }
 
 
     // ----------------------------
     // Geri Sayım Sayaç Logic
     // ----------------------------
     function startCountdown() {
-        // Hedef yıl dönümü: Başlangıç tarihi olarak 24 Ağustos 2024'ü alalım.
-        let targetDate = new Date('AUGUST 24, 2024 00:00:00').getTime();
+        // Mevcut yıla göre 24 Ağustos'u hedefle
+        let targetDate = new Date(`AUGUST 24, ${new Date().getFullYear()} 00:00:00`).getTime();
 
-        // Eğer hedef tarih geçmişse, bir sonraki yılın aynı tarihine ayarla
-        while (targetDate < new Date().getTime()) {
-            targetDate = new Date(new Date(targetDate).setFullYear(new Date(targetDate).getFullYear() + 1)).getTime();
+        // Eğer hedef tarih şimdiki zamandan geçmişse, bir sonraki yıla ayarla
+        if (targetDate < new Date().getTime()) {
+            targetDate = new Date(`AUGUST 24, ${new Date().getFullYear() + 1} 00:00:00`).getTime();
         }
 
         const daysEl = document.getElementById('days');
@@ -202,8 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const now = new Date().getTime();
             let distance = targetDate - now;
 
-            // Eğer yıldönümü anı geçmişse, hemen bir sonraki yılı hedefle ve tekrar hesapla
-            if (distance < 0) {
+            if (distance < 0) { // Eğer yıl dönümü anı geçmişse, hemen bir sonraki yılı hedefle
                 targetDate = new Date(new Date(targetDate).setFullYear(new Date(targetDate).getFullYear() + 1)).getTime();
                 distance = targetDate - now; // Yeni mesafeyi tekrar hesapla
             }
@@ -219,8 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
             secondsEl.textContent = seconds;
         }
 
-        updateCountdown(); // İlk çalıştırma
-        setInterval(updateCountdown, 1000); // Her saniye güncelle
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
     }
 
     // Sadece countdown-timer elementi varsa başlat
@@ -336,28 +267,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------
-    // Fotoğraf Galerisi Modal Logic
+    // Fotoğraf Galerisi Modal Logic (Mevcut kodunuzdaki modal açma kısmı)
     // ----------------------------
-    const galleryImages = document.querySelectorAll('#gallery-grid img');
+    // NOT: galleryImages değişkeni, aşağıdaki yeni kodda renderGallery() içinde dinamik olarak yönetiliyor.
+    // Bu kısmı, aşağıda entegre ettiğim renderGallery() ve createGalleryItem() fonksiyonları devralacak.
+    // Bu yüzden bu bloğun içeriği aşağıdaki "Yeni Fotoğraf Galerisi Logic" içinde ele alınmıştır.
     const photoModal = document.getElementById('photoModal');
     const modalImage = document.getElementById('modalImage');
     const closeButton = document.querySelector('.close-button');
 
-    galleryImages.forEach(img => {
-        img.addEventListener('click', () => {
-            modalImage.src = img.dataset.full;
-            photoModal.classList.add('show');
-            modalImage.focus(); // Modal açıldığında odak yönetimini iyileştir
-        });
-    });
-
-    if (closeButton) { // closeButton elementi varsa dinleyici ekle
+    if (closeButton) {
         closeButton.addEventListener('click', () => {
             photoModal.classList.remove('show');
         });
     }
 
-    if (photoModal) { // photoModal elementi varsa dinleyici ekle
+    if (photoModal) {
         photoModal.addEventListener('click', (e) => {
             if (e.target === photoModal) {
                 photoModal.classList.remove('show');
@@ -373,65 +298,182 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ----------------------------
-    // Yapılacaklar Listesi Logic (Event Delegation ile)
+    // YENİ: Fotoğraf Galerisi Yükleme ve Yönetim Logic'i (Daha önceki konuşmamızdaki haliyle entegre edildi)
     // ----------------------------
-    const todoInput = document.getElementById('todoInput');
-    const addTodoBtn = document.getElementById('addTodoBtn');
-    const todoList = document.getElementById('todoList');
+    const imageUpload = document.getElementById('imageUpload');
+    const addImageBtn = document.getElementById('addImageBtn');
+    const uploadStatus = document.getElementById('uploadStatus');
+    const galleryGrid = document.getElementById('gallery-grid');
 
-    function createTodoItem(text) {
-        const listItem = document.createElement('li');
-        listItem.className = 'bg-slate-50 p-4 rounded-lg shadow-sm flex items-center justify-between';
-        listItem.innerHTML = `
-            <span class="text-lg text-slate-700">${text}</span>
-            <button class="delete-todo-btn text-red-500 hover:text-red-700 font-bold px-2" aria-label="Görevi sil">X</button>
+    // Yardımcı Fonksiyon: Galeriyi localStorage'a kaydet
+    function saveGalleryImages(images) {
+        localStorage.setItem('galleryImages', JSON.stringify(images));
+    }
+
+    // Yardımcı Fonksiyon: Galeriyi localStorage'dan yükle
+    function loadGalleryImages() {
+        const savedImages = localStorage.getItem('galleryImages');
+        return savedImages ? JSON.parse(savedImages) : [];
+    }
+
+    // Yardımcı Fonksiyon: Galeri öğesini HTML'e oluşturur
+    function createGalleryItem(imageSrc, altText) {
+        const galleryItem = document.createElement('div');
+        galleryItem.className = 'gallery-item relative';
+        galleryItem.innerHTML = `
+            <img src="${imageSrc}" data-full="${imageSrc}" alt="${altText || 'Galerimdeki bir fotoğraf'}"
+                class="w-full h-full object-cover cursor-pointer" loading="lazy">
+            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span>${altText || 'Yeni Fotoğraf'}</span>
+            </div>
+            <button class="delete-gallery-item-btn absolute top-2 right-2 text-gray-400 hover:text-red-600" aria-label="Fotoğrafı sil">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
         `;
-        return listItem;
+
+        // Silme butonuna event listener ekle
+        galleryItem.querySelector('.delete-gallery-item-btn').addEventListener('click', (e) => {
+            const itemToRemove = e.target.closest('.gallery-item');
+            if (itemToRemove) {
+                const imgElement = itemToRemove.querySelector('img');
+                if (imgElement) {
+                    deleteGalleryImage(imgElement.src); // Resmi sil
+                }
+            }
+        });
+
+        // Fotoğraf modalını açmak için event listener ekle
+        galleryItem.querySelector('img').addEventListener('click', () => {
+            modalImage.src = imageSrc;
+            photoModal.classList.add('show');
+            // Odaklama zaten global olarak klavye ile kapatma için tanımlanmış.
+            // modalImage.focus(); // Gerekliyse tekrar odaklayabiliriz
+        });
+
+        return galleryItem;
     }
 
-    function addTodoItem() {
-        const todoText = todoInput.value.trim();
-        if (todoText !== '') {
-            const newItem = createTodoItem(todoText);
-            todoList.appendChild(newItem);
-            todoInput.value = '';
-            todoInput.focus(); // Yeni öğe eklendikten sonra girişe odaklan
+    // Fonksiyon: Galeriyi yeniden render et
+    function renderGallery() {
+        let currentImages = loadGalleryImages();
+        
+        // Eğer localStorage boşsa, HTML'deki varsayılan resimleri ekle
+        // Bu kısım, HTML'deki statik resimlerin bir kereliğine localStorage'a aktarılmasını sağlar.
+        if (currentImages.length === 0) {
+            // Sadece başlangıçta HTML'deki resimleri al ve localStorage'a ekle
+            // HTML'deki resimlerin data-full niteliği yerine src'si kullanılıyor
+            document.querySelectorAll('#gallery-grid > .gallery-item img').forEach(img => {
+                currentImages.push({ src: img.src, alt: img.alt });
+            });
+            saveGalleryImages(currentImages); // Varsayılanları kaydet
         }
+
+        // Mevcut galeriyi temizle
+        galleryGrid.innerHTML = ''; 
+
+        // Tüm resimleri (varsayılanlar + yüklenenler) render et
+        currentImages.forEach(imgData => {
+            galleryGrid.appendChild(createGalleryItem(imgData.src, imgData.alt));
+        });
     }
 
-    if (addTodoBtn) {
-        addTodoBtn.addEventListener('click', addTodoItem);
+    // Fonksiyon: Galeriden fotoğraf sil
+    function deleteGalleryImage(imageSrcToDelete) {
+        let currentImages = loadGalleryImages();
+        const updatedImages = currentImages.filter(img => img.src !== imageSrcToDelete);
+        saveGalleryImages(updatedImages);
+        renderGallery(); // Galeriyi yeniden çiz
     }
 
-    if (todoInput) {
-        todoInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                addTodoItem();
+    // Butona tıklanınca gizli input'u tetikle
+    if (addImageBtn) {
+        addImageBtn.addEventListener('click', () => {
+            imageUpload.click(); // input type="file" elementini programatik olarak tıklar
+        });
+    }
+
+    // Dosya seçildiğinde
+    if (imageUpload) {
+        imageUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                if (!file.type.startsWith('image/')) {
+                    uploadStatus.textContent = 'Hata: Lütfen bir görsel dosyası seçin.';
+                    uploadStatus.className = 'text-sm mt-2 text-red-600';
+                    uploadStatus.classList.remove('hidden');
+                    return;
+                }
+
+                uploadStatus.textContent = 'Fotoğraf yükleniyor...';
+                uploadStatus.className = 'text-sm mt-2 text-indigo-600';
+                uploadStatus.classList.remove('hidden');
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const base64Image = e.target.result; // Base64 string'i
+                    const altText = prompt('Bu fotoğraf için bir açıklama girin (isteğe bağlı):') || '';
+
+                    let currentImages = loadGalleryImages();
+                    currentImages.push({ src: base64Image, alt: altText });
+                    saveGalleryImages(currentImages); // Yeni resmi kaydet
+
+                    renderGallery(); // Galeriyi yeniden çiz
+                    
+                    uploadStatus.textContent = 'Fotoğraf başarıyla eklendi!';
+                    uploadStatus.className = 'text-sm mt-2 text-green-600';
+                    setTimeout(() => {
+                        uploadStatus.classList.add('hidden');
+                    }, 3000);
+                };
+                reader.onerror = () => {
+                    uploadStatus.textContent = 'Dosya okuma hatası.';
+                    uploadStatus.className = 'text-sm mt-2 text-red-600';
+                };
+                reader.readAsDataURL(file); // Dosyayı Base64 olarak oku
             }
         });
     }
 
-    // Olay Delegasyonu: todoList'e bir dinleyici ekleyerek tüm silme butonlarını yönet
-    if (todoList) {
-        todoList.addEventListener('click', (e) => {
-            if (e.target.classList.contains('delete-todo-btn')) {
-                e.target.closest('li').remove();
-            }
-        });
+    // Sayfa yüklendiğinde galeriyi render et
+    // Bu kısım, galerinin başlangıçta ve her değişiklikte güncellenmesini sağlar.
+    if (galleryGrid) {
+        renderGallery();
     }
+
 
     // ----------------------------
-    // Mesaj Kutusu Gönderim Logic
+    // Mesaj Kutusu Gönderim Logic (localStorage Eklendi)
     // ----------------------------
     const messageForm = document.getElementById('messageForm');
     const messageStatus = document.getElementById('messageStatus');
     const messageTextarea = document.getElementById('messageTextarea');
 
+    // Mesajları localStorage'a kaydeden yardımcı fonksiyon
+    function saveMessage(message) {
+        let messages = localStorage.getItem('userMessages');
+        messages = messages ? JSON.parse(messages) : [];
+        messages.push({
+            text: message,
+            timestamp: new Date().toLocaleString('tr-TR')
+        });
+        localStorage.setItem('userMessages', JSON.stringify(messages));
+    }
+
+    // Mesajları localStorage'dan yükleyip döndüren fonksiyon
+    function loadMessages() {
+        const savedMessages = localStorage.getItem('userMessages');
+        return savedMessages ? JSON.parse(savedMessages) : [];
+    }
+
     if (messageForm) {
         messageForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            if (messageTextarea.value.trim() === '') {
+            const messageContent = messageTextarea.value.trim();
+
+            if (messageContent === '') {
                 messageStatus.textContent = 'Lütfen bir mesaj yazın.';
                 messageStatus.classList.remove('hidden', 'text-green-600');
                 messageStatus.classList.add('text-red-600');
@@ -442,7 +484,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Simülasyon devam ediyor, backend entegrasyonu için yorum satırı örneği bırakıldı
+            saveMessage(messageContent); // Mesajı localStorage'a kaydet
+
             messageStatus.textContent = 'Mesajın başarıyla gönderildi!';
             messageStatus.classList.remove('hidden', 'text-red-600');
             messageStatus.classList.add('text-green-600');
@@ -453,4 +496,80 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 3000);
         });
     }
-});
+
+    // ----------------------------
+    // Mesaj Kontrol ve Yönetim Logic'i
+    // ----------------------------
+    const adminMessagesSection = document.getElementById('adminMessages');
+    const messagesList = document.getElementById('messagesList');
+    const clearMessagesBtn = document.getElementById('clearMessagesBtn');
+
+    // Mesajları HTML'e çizen fonksiyon
+    function renderMessages() {
+        const messages = loadMessages(); // Mesajları yükle
+        messagesList.innerHTML = ''; // Listeyi temizle
+
+        if (messages.length === 0) {
+            messagesList.innerHTML = '<p class="text-center text-slate-500">Henüz gönderilmiş bir mesaj yok.</p>';
+            clearMessagesBtn.classList.add('hidden'); // Mesaj yoksa temizle butonunu gizle
+            return;
+        }
+
+        clearMessagesBtn.classList.remove('hidden'); // Mesaj varsa temizle butonunu göster
+
+        messages.forEach((msg, index) => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'bg-slate-100 p-4 rounded-lg shadow-sm relative';
+            messageDiv.innerHTML = `
+                <p class="text-slate-800 break-words">${msg.text}</p>
+                <p class="text-sm text-slate-500 mt-2 text-right">${msg.timestamp}</p>
+                <button class="delete-single-message-btn absolute top-2 right-2 text-gray-400 hover:text-red-600" data-index="${index}" aria-label="Bu mesajı sil">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            `;
+            messagesList.appendChild(messageDiv);
+        });
+    }
+
+    // Tek bir mesajı silme fonksiyonu
+    if (messagesList) {
+        messagesList.addEventListener('click', (e) => {
+            if (e.target.closest('.delete-single-message-btn')) {
+                const btn = e.target.closest('.delete-single-message-btn');
+                const indexToDelete = parseInt(btn.dataset.index);
+
+                let messages = loadMessages();
+                messages.splice(indexToDelete, 1);
+
+                localStorage.setItem('userMessages', JSON.stringify(messages));
+                renderMessages(); // Listeyi yeniden çiz
+            }
+        });
+    }
+
+    // Tüm mesajları temizleme fonksiyonu
+    if (clearMessagesBtn) {
+        clearMessagesBtn.addEventListener('click', () => {
+            if (confirm('Tüm mesajları silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) {
+                localStorage.removeItem('userMessages');
+                renderMessages(); // Listeyi yeniden çiz (boş görünecek)
+            }
+        });
+    }
+
+    // URL kontrolü yaparak mesajlar bölümünü göster/gizle
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('show') === 'messages') {
+        if (adminMessagesSection) { // adminMessagesSection'ın varlığını kontrol et
+            adminMessagesSection.classList.remove('hidden');
+            renderMessages(); // Mesajları çiz
+        }
+    } else {
+        if (adminMessagesSection) { // adminMessagesSection'ın varlığını kontrol et
+            adminMessagesSection.classList.add('hidden');
+        }
+    }
+
+}); // DOMContentLoaded kapanış parantezi

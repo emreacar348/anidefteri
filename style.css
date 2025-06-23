@@ -27,12 +27,6 @@ body {
 }
 
 
-.nav-link.active {
-  background-color: var(--primary);
-  color: white;
-  font-weight: 600;
-}
-
 .chart-container {
   position: relative;
   height: 320px;
@@ -49,6 +43,8 @@ body {
   }
 }
 
+/* #main-nav kaldırıldığı için bu kısım da kaldırıldı */
+/*
 #main-nav {
   position: sticky;
   top: 0;
@@ -56,6 +52,7 @@ body {
   background-color: var(--background);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+*/
 
 .wheel-container {
   position: relative;
@@ -133,12 +130,12 @@ body {
 }
 
 button,
-.nav-link {
+.nav-link { /* .nav-link artık kullanılmıyor olabilir */
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover,
-.nav-link:hover {
+.nav-link:hover { /* .nav-link artık kullanılmıyor olabilir */
   background-color: var(--accent);
   transform: scale(1.05);
 }
@@ -387,6 +384,8 @@ h2 {
 
 /*? Mobil menü ve Müzik paneli için */
 
+/* Navbar ile ilgili CSS kaldırıldı */
+/*
 .sr-only {
   position: absolute;
   width: 1px;
@@ -398,46 +397,61 @@ h2 {
   white-space: nowrap;
   border-width: 0;
 }
-
+*/
 
 /* Navbar için özel responsive ayarlar */
+/* #main-nav .container kaldırıldığı için bu kısım da kaldırıldı */
+/*
 #main-nav .container {
-    /* Large ekranlarda space-x-4, küçük ekranlarda justify-between olacak */
     display: flex;
-    justify-content: space-between; /* Hamburger ve logo/başlık için */
+    justify-content: space-between;
     align-items: center;
 }
+*/
 
+/* #nav-menu kaldırıldığı için bu kısım da kaldırıldı */
+/*
 #nav-menu {
-    /* Tailwind sınıfları HTML'de halihazırda var:
-       hidden lg:flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-4
-       absolute lg:relative top-full left-0 w-full lg:w-auto
-       bg-white lg:bg-transparent shadow-lg lg:shadow-none py-4 lg:py-0 px-4 lg:px-0
-    */
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Animasyon için */
-    transform: translateY(-10px); /* Açılırken hafif aşağı kayma */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    transform: translateY(-10px);
     opacity: 0;
-    pointer-events: none; /* Gizliyken tıklamaları engelle */
+    pointer-events: none;
 }
 
-#nav-menu.flex { /* flex sınıfı eklenince görünür olacak */
+#nav-menu.flex {
     transform: translateY(0);
     opacity: 1;
-    pointer-events: auto; /* Görünürken tıklamaları etkinleştir */
+    pointer-events: auto;
 }
 
-#nav-menu.active-mobile-menu { /* JavaScript tarafından eklenecek bir sınıf */
-    /* Menü açıldığında uygulanacak ek stil veya animasyonlar */
+#nav-menu.active-mobile-menu {
 }
+*/
 
-/* Nav Linkleri mobil görünümde tam genişlikte olsun */
+/* #nav-menu kaldırıldığı için bu kısım da kaldırıldı */
+/*
 #nav-menu a.nav-link {
-    display: block; /* Her link kendi satırında */
-    width: 100%; /* Tam genişlik */
-    text-align: center; /* Ortala */
-    padding-left: 1rem; /* px-4 Tailwind'den geliyor */
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding-left: 1rem;
     padding-right: 1rem;
 }
+*/
+
+/* Masaüstü ekranlarda navigasyon menüsünü görünür yap */
+/* @media (min-width: 1024px) içindeki #nav-menu kuralları da kaldırıldı */
+/*
+@media (min-width: 1024px) {
+    #nav-menu {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        pointer-events: auto !important;
+        position: relative !important;
+        box-shadow: none !important;
+    }
+}
+*/
 
 /* Müzik paneli animasyonları ve konumlandırma */
 #music-player-container {
@@ -491,5 +505,3 @@ h2 {
         transform: translateY(0);
     }
 }
-
-/*? Mobil menü ve Müzik paneli için */
