@@ -1,28 +1,48 @@
 import { put } from '@vercel/blob';
 import { sql } from '@vercel/postgres';
 
-export default async function handler(request, response) {
+// Bu satır, fonksiyonun Node.js yerine Edge Runtime'da çalışmasını sağlar.
+export const runtime = 'edge';
+
+export default async function handler(request) {
+  // Edge Runtime'da request objesi, modern web standartlarına uygun gelir.
+  // Bu sayede .formData() metodunu kullanabiliriz.
   if (request.method !== 'POST') {
-    return response.status(405).json({ message: 'Only POST requests allowed' });
+    return new Response(JSON.stringify({ message: 'Only POST requests allowed' }), { status: 405 });
   }
 
   try {
-    // Vercel, FormData'yı otomatik olarak parse eder. Dosya 'file' alanındadır.
-    const file = request.files.file;
-    const altText = request.body.altText;
+    const form = await request.formData();
+    const file = form.get('file');
+    const altText = form.get('altText');
+
+    // Gelen verinin dosya olup olmadığını kontrol edelim
+    if (!file || typeof file === 'string') {
+        return new Response(JSON.stringify({ message: 'No file provided or file is not valid' }), { status: 400 });
+    }
     
     // Dosyayı Vercel Blob'a yükle
-    const blob = await put(file.originalFilename, file, { access: 'public' });
+    // Dosya adını güvenli hale getirelim (isteğe bağlı ama önerilir)
+    const safeFilename = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const blob = await put(safeFilename, file, { access: 'public' });
 
     // Veritabanına Blob URL'ini ve diğer bilgileri kaydet
-    await sql`INSERT INTO gallery_images (url, alt_text, blob_url) VALUES (${blob.url}, ${altText}, ${blob.url});`;
+    await sql`
+      INSERT INTO gallery_images (url, alt_text, blob_url) 
+      VALUES (${blob.url}, ${altText}, ${blob.url});
+    `;
     
-    return response.status(200).json({ success: true, blob });
+    // Başarılı olursa, JSON cevabı döndür
+    return new Response(JSON.stringify({ success: true, blob }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+
   } catch (error) {
-    return response.status(500).json({ message: error.message });
+    // Hata olursa, hatayı JSON olarak döndür
+    return new Response(JSON.stringify({ message: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }
-// Not: Bu fonksiyonun çalışması için Vercel ayarlarından "Enable Edge Functions for serverless functions" seçeneğini
-// aktif etmeniz veya projenizi Next.js gibi bir framework'e taşımanız gerekebilir, çünkü standart
-// serverless fonksiyonlar dosya yüklemeyi bu şekilde direkt desteklemeyebilir.
-// Eğer hata alırsanız, bu API endpoint'i için "Edge Function" olarak ayarlandığından emin olun.
