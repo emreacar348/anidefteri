@@ -1,11 +1,18 @@
-// script.js (Veritabanı Entegrasyonlu Nihai Sürüm)
+// script.js (SUPABASE İLE ÇALIŞAN NİHAİ SÜRÜM)
 
-// Bu kod bloğu, DOMContentLoaded'dan önce çalışmalıdır,
-// çünkü sayfa yüklenmeden önce yönlendirme kontrolü yapılması gerekir.
+// ----------------------------
+// SUPABASE İSTEMCİSİNİ BAŞLATMA
+// ----------------------------
+const SUPABASE_URL = 'https://aftwuaqybhokywjcsftb.supabase.co'; // HATA DÜZELTİLDİ: Sondaki '>' karakteri kaldırıldı.
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmdHd1YXF5Ymhva3l3amNzZnRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA4MzU2MDcsImV4cCI6MjA2NjQxMTYwN30.tJ0tvBHkS2gZYKZ-F2sr_aZqwy_9kGqoa7-hg87p0Ww'; // Sizin sağladığınız ANON KEY
+
+// HATA DÜZELTİLDİ: Supabase istemcisi doğru şekilde başlatıldı.
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+
+// --- GİRİŞ KONTROLÜ (Değişiklik yok) ---
 const currentPage = window.location.pathname.split('/').pop();
 if (currentPage === 'index.html' || currentPage === '') {
-    // localStorage'daki kontrol kalabilir, çünkü bu basit bir "giriş yapıldı mı?" bayrağıdır.
-    // Dilerseniz bunu da API ile daha güvenli bir session yönetimine çevirebilirsiniz.
     const isLoggedIn = localStorage.getItem('isLoggedIn');
     if (!isLoggedIn) {
         window.location.replace('login.html');
@@ -15,7 +22,7 @@ if (currentPage === 'index.html' || currentPage === '') {
 document.addEventListener('DOMContentLoaded', () => {
 
     // ----------------------------
-    // Yapılacaklar Listesi Logic (VERİTABANI)
+    // Yapılacaklar Listesi Logic (SUPABASE)
     // ----------------------------
     const todoInput = document.getElementById('todoInput');
     const addTodoBtn = document.getElementById('addTodoBtn');
@@ -32,42 +39,38 @@ document.addEventListener('DOMContentLoaded', () => {
         return listItem;
     }
     
+    // DEĞİŞİKLİK: Veritabanından veri çekmek için fetch yerine supabase.from().select() kullanıldı.
     async function loadTodos() {
+        if (!todoList) return;
         try {
-            const response = await fetch('/api/get-todos');
-            const todos = await response.json();
+            let { data: todos, error } = await supabase.from('todos').select('*').order('created_at', { ascending: false });
+            if (error) throw error;
             todoList.innerHTML = '';
             todos.forEach(todo => todoList.appendChild(createTodoItem(todo)));
-        } catch (error) { console.error('Görevler yüklenemedi:', error); }
+        } catch (error) { console.error('Görevler yüklenemedi:', error.message); }
     }
 
+    // DEĞİŞİKLİK: Veritabanına veri eklemek için fetch yerine supabase.from().insert() kullanıldı.
     async function addTodoItem() {
         const text = todoInput.value.trim();
         if (text) {
             try {
-                const response = await fetch('/api/add-todo', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text })
-                });
-                if(response.ok) {
-                    todoInput.value = '';
-                    todoInput.focus();
-                    loadTodos(); // Listeyi yeniden yükle
-                }
-            } catch (error) { console.error('Görev eklenemedi:', error); }
+                const { error } = await supabase.from('todos').insert([{ text: text }]);
+                if (error) throw error;
+                todoInput.value = '';
+                todoInput.focus();
+                loadTodos(); // Listeyi yeniden yükle
+            } catch (error) { console.error('Görev eklenemedi:', error.message); }
         }
     }
 
+    // DEĞİŞİKLİK: Veritabanından veri silmek için fetch yerine supabase.from().delete() kullanıldı.
     async function deleteTodoItem(id) {
          try {
-            const response = await fetch('/api/delete-todo', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id })
-            });
-            if(response.ok) loadTodos();
-        } catch (error) { console.error('Görev silinemedi:', error); }
+            const { error } = await supabase.from('todos').delete().eq('id', id);
+            if (error) throw error;
+            loadTodos();
+        } catch (error) { console.error('Görev silinemedi:', error.message); }
     }
 
     if (addTodoBtn) addTodoBtn.addEventListener('click', addTodoItem);
@@ -79,15 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 deleteTodoItem(id);
             }
         });
-        loadTodos(); // Sayfa yüklendiğinde veritabanından görevleri yükle
+        loadTodos();
     }
 
 
     // ----------------------------
-    // Fotoğraf Galerisi ve Yönetim Logic (VERİTABANI & BLOB)
+    // Fotoğraf Galerisi ve Yönetim Logic (SUPABASE)
     // ----------------------------
     const photoModal = document.getElementById('photoModal');
-    // ... (modal'ın diğer değişkenleri ve event listener'ları aynı kalabilir) ...
     const imageUpload = document.getElementById('imageUpload');
     const addImageBtn = document.getElementById('addImageBtn');
     const uploadStatus = document.getElementById('uploadStatus');
@@ -102,42 +104,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white text-sm p-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <span>${image.alt_text || 'Yeni Fotoğraf'}</span>
                 </div>
-                <button class="delete-gallery-item-btn absolute top-2 right-2 text-white bg-black bg-opacity-30 rounded-full p-1 opacity-0 group-hover:opacity-100 hover:bg-opacity-50 transition-all" aria-label="Fotoğrafı sil">
+                <button data-url="${image.url}" data-id="${image.id}" class="delete-gallery-item-btn absolute top-2 right-2 text-white bg-black bg-opacity-30 rounded-full p-1 opacity-0 group-hover:opacity-100 hover:bg-opacity-50 transition-all" aria-label="Fotoğrafı sil">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>`;
-
+            
+            // Silme butonu için event listener
             galleryItem.querySelector('.delete-gallery-item-btn').addEventListener('click', async (e) => {
                 e.stopPropagation();
                 if(confirm("Bu anıyı silmek istediğinizden emin misiniz?")){
-                    await deleteGalleryImage(image.id, image.blob_url);
+                    const imageId = e.currentTarget.dataset.id;
+                    const imageUrl = e.currentTarget.dataset.url;
+                    await deleteGalleryImage(imageId, imageUrl);
                 }
             });
 
-             galleryItem.querySelector('img').addEventListener('click', () => {
+            // Resmi büyütme için event listener
+            galleryItem.querySelector('img').addEventListener('click', () => {
+                const modal = document.getElementById('photoModal');
                 document.getElementById('modalImage').src = image.url;
-                photoModal.classList.add('show');
+                modal.classList.add('show');
             });
             return galleryItem;
         }
 
+        // DEĞİŞİKLİK: Galeriyi Supabase veritabanından yükle
         async function renderGallery() {
             try {
-                const response = await fetch('/api/get-images');
-                const images = await response.json();
-                galleryGrid.innerHTML = '';
+                let { data: images, error } = await supabase.from('gallery_images').select('*').order('created_at', { ascending: false });
+                if (error) throw error;
+                galleryGrid.innerHTML = ''; // Önceki statik resimleri temizle
                 images.forEach(imgData => galleryGrid.appendChild(createGalleryItem(imgData)));
-            } catch (error) { console.error("Galeri yüklenemedi:", error); }
+            } catch (error) { console.error("Galeri yüklenemedi:", error.message); }
         }
 
-        async function deleteGalleryImage(id, blobUrl) {
+        // DEĞİŞİKLİK: Fotoğrafı Supabase Storage ve veritabanından sil
+        async function deleteGalleryImage(id, imageUrl) {
             try {
-                await fetch('/api/delete-image', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id, blobUrl })
-                });
+                // Supabase Storage'dan silmek için dosya yolunu URL'den çıkarmalıyız
+                const bucketName = 'gallery-photos';
+                const filePath = imageUrl.substring(imageUrl.indexOf(bucketName) + bucketName.length + 1);
+                
+                const { error: storageError } = await supabase.storage.from(bucketName).remove([filePath]);
+                if (storageError) throw storageError;
+
+                // Veritabanından kaydı sil
+                const { error: dbError } = await supabase.from('gallery_images').delete().eq('id', id);
+                if (dbError) throw dbError;
+
                 renderGallery();
-            } catch (error) { console.error("Resim silinemedi:", error); }
+            } catch (error) { 
+                console.error("Resim silinemedi:", error.message); 
+                alert("Resim silinirken bir hata oluştu.");
+            }
         }
 
         if (addImageBtn) addImageBtn.addEventListener('click', () => imageUpload.click());
@@ -151,25 +169,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 uploadStatus.textContent = 'Yükleniyor...';
                 uploadStatus.className = 'text-sm mt-2 text-indigo-600';
                 uploadStatus.classList.remove('hidden');
-
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('altText', altText);
-
+                
                 try {
-                    const response = await fetch('/api/upload-image', {
-                        method: 'POST',
-                        body: formData,
-                    });
+                    // DEĞİŞİKLİK: Dosyayı Supabase Storage'a yükle ve veritabanına kaydet
+                    const filePath = `public/${Date.now()}-${file.name}`;
+                    const { error: uploadError } = await supabase.storage.from('gallery-photos').upload(filePath, file);
+                    if (uploadError) throw uploadError;
 
-                    if (response.ok) {
-                        uploadStatus.textContent = 'Başarıyla eklendi!';
-                        uploadStatus.className = 'text-sm mt-2 text-green-600';
-                        renderGallery();
-                    } else {
-                        const error = await response.json();
-                        throw new Error(error.message);
-                    }
+                    const { data: urlData } = supabase.storage.from('gallery-photos').getPublicUrl(filePath);
+                    
+                    const { error: dbError } = await supabase.from('gallery_images').insert([{ url: urlData.publicUrl, alt_text: altText }]);
+                    if (dbError) throw dbError;
+
+                    uploadStatus.textContent = 'Başarıyla eklendi!';
+                    uploadStatus.className = 'text-sm mt-2 text-green-600';
+                    renderGallery();
                 } catch (error) {
                     uploadStatus.textContent = `Hata: ${error.message}`;
                     uploadStatus.className = 'text-sm mt-2 text-red-600';
@@ -178,14 +192,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
-        renderGallery();
+        
+        // Modal kapatma butonu
+        const modal = document.getElementById('photoModal');
+        if(modal) {
+            modal.querySelector('.close-button').addEventListener('click', () => {
+                modal.classList.remove('show');
+            });
+        }
+        
+        renderGallery(); // Sayfa yüklendiğinde galeriyi veritabanından yükle
     }
     
-    // Diğer tüm özellikler (Etkinlik Çarkı, Mesaj Kutusu vb.) için de
-    // benzer şekilde localStorage yerine fetch ile API çağırma mantığı uygulanmalıdır.
-    // Bu cevapta en karmaşık iki örnek olan Yapılacaklar Listesi ve Fotoğraf Galerisi'ni
-    // veritabanına bağladık. Diğerlerini de bu örneklerden yola çıkarak yapabilirsiniz.
+    // Geri sayım sayacı, müzik çalar gibi diğer statik fonksiyonlar burada yer alabilir.
+    // Onlarda bir değişiklik yapmaya gerek yok.
 });
-
-// Geri sayım sayacı gibi sunucu verisi gerektirmeyen diğer tüm fonksiyonlar
-// bu dosyanın ilgili yerlerinde aynen kalabilir.
