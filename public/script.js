@@ -1,13 +1,15 @@
-// script.js (SUPABASE İLE ÇALIŞAN NİHAİ SÜRÜM)
+// script.js (HATALARI DÜZELTİLMİŞ NİHAİ SÜRÜM)
 
 // ----------------------------
 // SUPABASE İSTEMCİSİNİ BAŞLATMA
 // ----------------------------
-const SUPABASE_URL = 'https://aftwuaqybhokywjcsftb.supabase.co'; // HATA DÜZELTİLDİ: Sondaki '>' karakteri kaldırıldı.
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmdHd1YXF5Ymhva3l3amNzZnRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA4MzU2MDcsImV4cCI6MjA2NjQxMTYwN30.tJ0tvBHkS2gZYKZ-F2sr_aZqwy_9kGqoa7-hg87p0Ww'; // Sizin sağladığınız ANON KEY
+const SUPABASE_URL = 'https://aftwuaqybhokywjcsftb.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmdHd1YXF5Ymhva3l3amNzZnRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA4MzU2MDcsImV4cCI6MjA2NjQxMTYwN30.tJ0tvBHkS2gZYKZ-F2sr_aZqwy_9kGqoa7-hg87p0Ww';
 
-// HATA DÜZELTİLDİ: Supabase istemcisi doğru şekilde başlatıldı.
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// --- DÜZELTME BURADA ---
+// 'supabase' global nesnesini kullanarak yeni bir istemci oluşturuyoruz.
+// Değişken adını 'supabaseClient' olarak değiştirerek karışıklığı önlüyoruz.
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
 // --- GİRİŞ KONTROLÜ (Değişiklik yok) ---
@@ -18,6 +20,7 @@ if (currentPage === 'index.html' || currentPage === '') {
         window.location.replace('login.html');
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -39,35 +42,35 @@ document.addEventListener('DOMContentLoaded', () => {
         return listItem;
     }
     
-    // DEĞİŞİKLİK: Veritabanından veri çekmek için fetch yerine supabase.from().select() kullanıldı.
     async function loadTodos() {
         if (!todoList) return;
         try {
-            let { data: todos, error } = await supabase.from('todos').select('*').order('created_at', { ascending: false });
+            // DEĞİŞİKLİK: 'supabase' yerine 'supabaseClient' kullanıldı.
+            let { data: todos, error } = await supabaseClient.from('todos').select('*').order('created_at', { ascending: false });
             if (error) throw error;
             todoList.innerHTML = '';
             todos.forEach(todo => todoList.appendChild(createTodoItem(todo)));
         } catch (error) { console.error('Görevler yüklenemedi:', error.message); }
     }
 
-    // DEĞİŞİKLİK: Veritabanına veri eklemek için fetch yerine supabase.from().insert() kullanıldı.
     async function addTodoItem() {
         const text = todoInput.value.trim();
         if (text) {
             try {
-                const { error } = await supabase.from('todos').insert([{ text: text }]);
+                // DEĞİŞİKLİK: 'supabase' yerine 'supabaseClient' kullanıldı.
+                const { error } = await supabaseClient.from('todos').insert([{ text: text }]);
                 if (error) throw error;
                 todoInput.value = '';
                 todoInput.focus();
-                loadTodos(); // Listeyi yeniden yükle
+                loadTodos();
             } catch (error) { console.error('Görev eklenemedi:', error.message); }
         }
     }
 
-    // DEĞİŞİKLİK: Veritabanından veri silmek için fetch yerine supabase.from().delete() kullanıldı.
     async function deleteTodoItem(id) {
          try {
-            const { error } = await supabase.from('todos').delete().eq('id', id);
+            // DEĞİŞİKLİK: 'supabase' yerine 'supabaseClient' kullanıldı.
+            const { error } = await supabaseClient.from('todos').delete().eq('id', id);
             if (error) throw error;
             loadTodos();
         } catch (error) { console.error('Görev silinemedi:', error.message); }
@@ -108,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>`;
             
-            // Silme butonu için event listener
             galleryItem.querySelector('.delete-gallery-item-btn').addEventListener('click', async (e) => {
                 e.stopPropagation();
                 if(confirm("Bu anıyı silmek istediğinizden emin misiniz?")){
@@ -118,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Resmi büyütme için event listener
             galleryItem.querySelector('img').addEventListener('click', () => {
                 const modal = document.getElementById('photoModal');
                 document.getElementById('modalImage').src = image.url;
@@ -127,28 +128,26 @@ document.addEventListener('DOMContentLoaded', () => {
             return galleryItem;
         }
 
-        // DEĞİŞİKLİK: Galeriyi Supabase veritabanından yükle
         async function renderGallery() {
             try {
-                let { data: images, error } = await supabase.from('gallery_images').select('*').order('created_at', { ascending: false });
+                // DEĞİŞİKLİK: 'supabase' yerine 'supabaseClient' kullanıldı.
+                let { data: images, error } = await supabaseClient.from('gallery_images').select('*').order('created_at', { ascending: false });
                 if (error) throw error;
-                galleryGrid.innerHTML = ''; // Önceki statik resimleri temizle
+                galleryGrid.innerHTML = '';
                 images.forEach(imgData => galleryGrid.appendChild(createGalleryItem(imgData)));
             } catch (error) { console.error("Galeri yüklenemedi:", error.message); }
         }
 
-        // DEĞİŞİKLİK: Fotoğrafı Supabase Storage ve veritabanından sil
         async function deleteGalleryImage(id, imageUrl) {
             try {
-                // Supabase Storage'dan silmek için dosya yolunu URL'den çıkarmalıyız
                 const bucketName = 'gallery-photos';
                 const filePath = imageUrl.substring(imageUrl.indexOf(bucketName) + bucketName.length + 1);
                 
-                const { error: storageError } = await supabase.storage.from(bucketName).remove([filePath]);
+                // DEĞİŞİKLİK: 'supabase' yerine 'supabaseClient' kullanıldı.
+                const { error: storageError } = await supabaseClient.storage.from(bucketName).remove([filePath]);
                 if (storageError) throw storageError;
 
-                // Veritabanından kaydı sil
-                const { error: dbError } = await supabase.from('gallery_images').delete().eq('id', id);
+                const { error: dbError } = await supabaseClient.from('gallery_images').delete().eq('id', id);
                 if (dbError) throw dbError;
 
                 renderGallery();
@@ -171,14 +170,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 uploadStatus.classList.remove('hidden');
                 
                 try {
-                    // DEĞİŞİKLİK: Dosyayı Supabase Storage'a yükle ve veritabanına kaydet
+                    const bucketName = 'gallery-photos';
                     const filePath = `public/${Date.now()}-${file.name}`;
-                    const { error: uploadError } = await supabase.storage.from('gallery-photos').upload(filePath, file);
+                    
+                    // DEĞİŞİKLİK: 'supabase' yerine 'supabaseClient' kullanıldı.
+                    const { error: uploadError } = await supabaseClient.storage.from(bucketName).upload(filePath, file);
                     if (uploadError) throw uploadError;
 
-                    const { data: urlData } = supabase.storage.from('gallery-photos').getPublicUrl(filePath);
+                    const { data: urlData } = supabaseClient.storage.from(bucketName).getPublicUrl(filePath);
                     
-                    const { error: dbError } = await supabase.from('gallery_images').insert([{ url: urlData.publicUrl, alt_text: altText }]);
+                    const { error: dbError } = await supabaseClient.from('gallery_images').insert([{ url: urlData.publicUrl, alt_text: altText }]);
                     if (dbError) throw dbError;
 
                     uploadStatus.textContent = 'Başarıyla eklendi!';
@@ -193,7 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
-        // Modal kapatma butonu
         const modal = document.getElementById('photoModal');
         if(modal) {
             modal.querySelector('.close-button').addEventListener('click', () => {
@@ -201,9 +201,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
-        renderGallery(); // Sayfa yüklendiğinde galeriyi veritabanından yükle
+        renderGallery();
     }
     
     // Geri sayım sayacı, müzik çalar gibi diğer statik fonksiyonlar burada yer alabilir.
-    // Onlarda bir değişiklik yapmaya gerek yok.
 });
