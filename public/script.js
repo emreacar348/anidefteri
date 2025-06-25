@@ -1,28 +1,26 @@
-// script.js (HATALARI DÜZELTİLMİŞ NİHAİ SÜRÜM)
-
-// ----------------------------
-// SUPABASE İSTEMCİSİNİ BAŞLATMA
-// ----------------------------
-const SUPABASE_URL = 'https://aftwuaqybhokywjcsftb.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmdHd1YXF5Ymhva3l3amNzZnRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA4MzU2MDcsImV4cCI6MjA2NjQxMTYwN30.tJ0tvBHkS2gZYKZ-F2sr_aZqwy_9kGqoa7-hg87p0Ww';
-
-// --- DÜZELTME BURADA ---
-// 'supabase' global nesnesini kullanarak yeni bir istemci oluşturuyoruz.
-// Değişken adını 'supabaseClient' olarak değiştirerek karışıklığı önlüyoruz.
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-
-// --- GİRİŞ KONTROLÜ (Değişiklik yok) ---
-const currentPage = window.location.pathname.split('/').pop();
-if (currentPage === 'index.html' || currentPage === '') {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    if (!isLoggedIn) {
-        window.location.replace('login.html');
-    }
-}
-
+// script.js (YAPISAL OLARAK DÜZELTİLMİŞ NİHAİ SÜRÜM)
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    // --- DÜZELTME: Tüm kodlar DOMContentLoaded içine alındı ---
+    // Bu, hem sayfanın hem de Supabase kütüphanesinin tamamen yüklendiğinden emin olmamızı sağlar.
+    
+    // ----------------------------
+    // SUPABASE İSTEMCİSİNİ BAŞLATMA
+    // ----------------------------
+    const SUPABASE_URL = 'https://aftwuaqybhokywjcsftb.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmdHd1YXF5Ymhva3l3amNzZnRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA4MzU2MDcsImV4cCI6MjA2NjQxMTYwN30.tJ0tvBHkS2gZYKZ-F2sr_aZqwy_9kGqoa7-hg87p0Ww';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+
+    // --- GİRİŞ KONTROLÜ (Değişiklik yok) ---
+    const currentPage = window.location.pathname.split('/').pop();
+    if (currentPage === 'index.html' || currentPage === '') {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (!isLoggedIn) {
+            window.location.replace('login.html');
+        }
+    }
 
     // ----------------------------
     // Yapılacaklar Listesi Logic (SUPABASE)
@@ -45,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadTodos() {
         if (!todoList) return;
         try {
-            // DEĞİŞİKLİK: 'supabase' yerine 'supabaseClient' kullanıldı.
             let { data: todos, error } = await supabaseClient.from('todos').select('*').order('created_at', { ascending: false });
             if (error) throw error;
             todoList.innerHTML = '';
@@ -57,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = todoInput.value.trim();
         if (text) {
             try {
-                // DEĞİŞİKLİK: 'supabase' yerine 'supabaseClient' kullanıldı.
                 const { error } = await supabaseClient.from('todos').insert([{ text: text }]);
                 if (error) throw error;
                 todoInput.value = '';
@@ -69,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function deleteTodoItem(id) {
          try {
-            // DEĞİŞİKLİK: 'supabase' yerine 'supabaseClient' kullanıldı.
             const { error } = await supabaseClient.from('todos').delete().eq('id', id);
             if (error) throw error;
             loadTodos();
@@ -130,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         async function renderGallery() {
             try {
-                // DEĞİŞİKLİK: 'supabase' yerine 'supabaseClient' kullanıldı.
                 let { data: images, error } = await supabaseClient.from('gallery_images').select('*').order('created_at', { ascending: false });
                 if (error) throw error;
                 galleryGrid.innerHTML = '';
@@ -143,9 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const bucketName = 'gallery-photos';
                 const filePath = imageUrl.substring(imageUrl.indexOf(bucketName) + bucketName.length + 1);
                 
-                // DEĞİŞİKLİK: 'supabase' yerine 'supabaseClient' kullanıldı.
                 const { error: storageError } = await supabaseClient.storage.from(bucketName).remove([filePath]);
-                if (storageError) throw storageError;
+                if (storageError && storageError.message !== 'The resource was not found') {
+                    // 'Not found' hatasını görmezden gel, çünkü dosya zaten silinmiş olabilir.
+                    throw storageError;
+                }
 
                 const { error: dbError } = await supabaseClient.from('gallery_images').delete().eq('id', id);
                 if (dbError) throw dbError;
@@ -173,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const bucketName = 'gallery-photos';
                     const filePath = `public/${Date.now()}-${file.name}`;
                     
-                    // DEĞİŞİKLİK: 'supabase' yerine 'supabaseClient' kullanıldı.
                     const { error: uploadError } = await supabaseClient.storage.from(bucketName).upload(filePath, file);
                     if (uploadError) throw uploadError;
 
