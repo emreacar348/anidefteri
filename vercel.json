@@ -9,5 +9,11 @@
       "src": "api/**/*.js",
       "use": "@vercel/node"
     }
+  ],
+  "routes": [
+    {
+      "src": "/((?!api/).*)",
+      "dest": "/public/$1"
+    }
   ]
 }
